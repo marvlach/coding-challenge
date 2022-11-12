@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { getTokenFromLocalStorage } from '../utils/getTokenFromLocalStorage';
+
 const API_URL = process.env.REACT_APP_API;
 
 export default class httpApi {
@@ -31,10 +33,10 @@ export default class httpApi {
         // restaurants' public info
         const requestConfig = {
             ...config,
-            ...(!!JSON.parse(localStorage.getItem("qr-code-generator-LiF-user-identifiers"))?.token && 
+            ...(!!getTokenFromLocalStorage() && 
             {
                 headers: {
-                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("qr-code-generator-LiF-user-identifiers"))?.token }`,
+                    Authorization: `Bearer ${getTokenFromLocalStorage()}`,
                 }
             })
         };

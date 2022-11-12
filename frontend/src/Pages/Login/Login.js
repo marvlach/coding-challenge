@@ -10,7 +10,7 @@ const Login = () => {
     const [isLoading, error, sendRequest] = useHttpRequest();
 
     const onResponse = (values, resBody) => {
-        console.log('logged in succesfully');
+        console.log('logged in succesfully', values, resBody);
     }
 
     const onFinish = async (values) => {

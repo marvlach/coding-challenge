@@ -9,15 +9,15 @@ const useHttpRequest = () =>  {
         setError(null);
 
         try {
-            console.log('hook', apiCallArgs)
+            // make API request with given arguments
             const response = await apiCall.apply(null, apiCallArgs);
 
-            if (!response.ok) {
+            if (response.status !== 200) {
                 throw new Error('Request failed!');
             }
         
-            const data = await response.json();
-            responseCallback(data);
+            // call the function that handles the response with arguments: response body
+            responseCallback(response.data);
 
         } catch (err) {
             setError(err.message || 'Something went wrong!');
