@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getTokenFromLocalStorage } from '../utils/getTokenFromLocalStorage';
+import { getTokenFromLocalStorage } from '../utils/manageLocalStorage';
 
 const API_URL = process.env.REACT_APP_API;
 
@@ -40,9 +40,10 @@ export default class httpApi {
                 }
             })
         };
-        console.log('requestConfig', requestConfig);
+
         try {
             const response = await this.instance(requestConfig);
+            console.log('superclass', response);
             return response;
         } catch (error) {
             if (error.response) {

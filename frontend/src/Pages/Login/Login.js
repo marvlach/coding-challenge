@@ -4,13 +4,21 @@ import { InboxOutlined, LockOutlined} from '@ant-design/icons';
 import { Avatar } from 'antd';
 import useHttpRequest from "../../hooks/useHttpRequest";
 import { loginUser } from "../../api/users/userApi";
+import { saveTokenToLocalStorage } from "../../utils/manageLocalStorage";
 
 const Login = () => {
 
     const [isLoading, error, sendRequest] = useHttpRequest();
-
+    
+    // 200 response, assumes i got a token
     const onResponse = (values, resBody) => {
         console.log('logged in succesfully', values, resBody);
+
+        // save token 
+        saveTokenToLocalStorage(resBody.token);
+
+        // dispatch action to get user data 
+        
     }
 
     const onFinish = async (values) => {
@@ -42,6 +50,7 @@ const Login = () => {
             >
                 <Form.Item
                     name="email"
+                    label="Email"
                     rules={[
                         {
                         type: 'email',
@@ -55,13 +64,13 @@ const Login = () => {
                 >
                 <Input 
                     placeholder="email"  
-                    prefix={<Avatar size="large" icon={<InboxOutlined />} />} 
-                    data-cy={'email-input'}
+                    prefix={<Avatar icon={<InboxOutlined />} />} 
                 />
                 </Form.Item>
                  
                 <Form.Item
                     name="password"
+                    label="Password"
                     rules={[
                         {
                         required: true,
@@ -71,8 +80,7 @@ const Login = () => {
                 >
                 <Input.Password 
                     placeholder="Password"  
-                    prefix={<Avatar size="large" icon={<LockOutlined />} />} 
-                    data-cy={'password-input'}
+                    prefix={<Avatar icon={<LockOutlined />} />} 
                 />
                 </Form.Item>
                 

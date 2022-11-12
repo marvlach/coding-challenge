@@ -11,7 +11,7 @@ const useHttpRequest = () =>  {
         try {
             // make API request with given arguments
             const response = await apiCall.apply(null, apiCallArgs);
-
+            console.log(response)
             if (response.status !== 200) {
                 throw new Error('Request failed!');
             }
@@ -19,8 +19,9 @@ const useHttpRequest = () =>  {
             // call the function that handles the response with arguments: response body
             responseCallback(response.data);
 
-        } catch (err) {
-            setError(err.message || 'Something went wrong!');
+        } catch (error) {
+            // prioritize backend error
+            setError(error?.response?.data || error.message || 'Something went wrong!');
         } finally {
             setIsLoading(false);
         }
