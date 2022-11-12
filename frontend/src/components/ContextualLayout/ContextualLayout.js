@@ -1,6 +1,7 @@
-import { Layout } from 'antd';
 import HeaderMenu from '../HeaderMenu/HeaderMenu';
 import SideMenu from '../SideMenu/SideMenu';
+import { Layout } from 'antd';
+
 const { Header, Footer, Sider, Content } = Layout;
 
 const isLoggedIn = false;
@@ -23,15 +24,16 @@ const ContextualLayout = (props) => {
 
     return (
         <>
-            <Layout>
+            <Layout style={{minHeight:"100vh"}} >
                 <Header>
                     <HeaderMenu isLoggedIn={isLoggedIn}/> 
                 </Header>
                 {content}
-                <Footer>
-                    Footer
+                <Footer style={{ textAlign: 'center', }} >
+                    Coding Test for Autohaus-Royal
                 </Footer>
             </Layout> 
+            
         </>
     );
 }

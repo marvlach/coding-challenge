@@ -1,11 +1,7 @@
-
 import { Card, Form, Input, Button } from "antd"
 import styles from './Signup.module.css';
-import { InboxOutlined, LockOutlined} from '@ant-design/icons';
-import { Avatar } from 'antd';
 import useHttpRequest from "../../hooks/useHttpRequest";
-import { createUser, loginUser } from "../../api/users/userApi";
-import { saveTokenToLocalStorage } from "../../utils/manageLocalStorage";
+import { createUser } from "../../api/users/userApi";
 import { validateNoStartEndSpaces } from "../../utils/antdFormFieldValidators";
 
 const Signup = () => {

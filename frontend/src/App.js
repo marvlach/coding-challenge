@@ -1,6 +1,6 @@
 import ContextualLayout from './components/ContextualLayout/ContextualLayout';
 import './App.css';
-import Routing from './Navigation/Routing';
+import Routing from './navigation/Routing';
 
 function App() {
   return (
