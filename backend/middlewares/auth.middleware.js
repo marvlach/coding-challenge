@@ -11,8 +11,9 @@ export const authenticateJWT = (req, res, next) => {
 
     if (!authHeader) {
         res.status(401).json({ message: "Unauthorized user." });
+        return;
     }
-    
+
     const token = authHeader.split(' ')[1];
 
     jwt.verify(token, secret, (err, decoded) => {

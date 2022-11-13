@@ -2,10 +2,11 @@ import User from "../models/user.model.js";
 import { generateToken } from "../utils/generateToken.js";
 import { isEmptyString } from "../utils/common.js";
 
-// GET Method for all users(needs jwt auth)
-export const getAllUsers = async (req, res) => {
+// GET Method for one/all users, by token
+export const getUser = async (req, res) => {
     try {
-        const users = await User.find().select("-password").lean().exec();
+        const queryString = req.query.all ? {} : {id: req.userId};
+        const users = await User.find(queryString).select("-password").lean().exec();
         res.status(200).json(users);
     } catch (err) {
         res.status(400).json('Error: ' + err);
@@ -13,7 +14,7 @@ export const getAllUsers = async (req, res) => {
 }
 
 // GET Method for one user
-export const getUser = async (req, res) => {
+export const getUserById = async (req, res) => {
     try {
         
         res.json(foundUser);

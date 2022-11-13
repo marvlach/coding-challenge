@@ -1,8 +1,11 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, } from 'react-router-dom'
 import Homepage from '../pages/Homepage/Homepage';
 import Login from '../pages/Login/Login';
+import NotFound from '../pages/NotFound/NotFound';
 import Signup from '../pages/Signup/Signup';
 import ProtectedRoute from './ProtectedRoute';
+import UserProfile from '../pages/UserProfile/UserProfile';
+import Users from '../pages/Users/Users';
 
 const Routing = () => {
     return (  
@@ -12,12 +15,11 @@ const Routing = () => {
             <Route path="/login" element={<Login />} />
             
 
-            {/* <Route element={<ProtectedRoute />}>
+            <Route element={<ProtectedRoute />}>
                 <Route path="/users" element={<Users />} />
                 <Route path="/users/:userId" element={<UserProfile />} />
-                <Route path="*" element={<Page404 />} />
-            </Route> */}
-            
+            </Route>
+            <Route path="*" element={<NotFound />} />
         </Routes>
             
     )

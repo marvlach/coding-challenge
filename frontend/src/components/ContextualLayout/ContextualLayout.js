@@ -1,12 +1,13 @@
 import HeaderMenu from '../HeaderMenu/HeaderMenu';
 import SideMenu from '../SideMenu/SideMenu';
 import { Layout } from 'antd';
+import useIsAuthenticated from '../../hooks/useIsAuthenticated';
 
 const { Header, Footer, Sider, Content } = Layout;
 
-const isLoggedIn = false;
-
 const ContextualLayout = (props) => {
+
+    const [isLoggedIn, isLoading, error] = useIsAuthenticated();
 
     const content = !isLoggedIn ?  
         <Content> 

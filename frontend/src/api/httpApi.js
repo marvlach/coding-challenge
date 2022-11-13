@@ -55,10 +55,7 @@ export default class httpApi {
             return Promise.reject(error);
         }
     }
-    
-    
-  
-    
+
     
     static get(url, queryParams, options) {
         let config = {

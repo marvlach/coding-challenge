@@ -1,13 +1,13 @@
 import express from "express";
-import { getAllUsers, createUser, authUser, getUser } from "../controllers/user.controller.js";
+import { getUser, createUser, authUser, getUserById } from "../controllers/user.controller.js";
 import { authenticateJWT } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
 // all routes here start with /user
-router.get('/', authenticateJWT, getAllUsers);
+router.get('/', authenticateJWT, getUser);
 
-router.get("/:userId", authenticateJWT, getUser);
+router.get("/:userId", authenticateJWT, getUserById);
 
 router.post('/add', createUser);
 
