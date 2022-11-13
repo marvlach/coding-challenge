@@ -1,11 +1,11 @@
 import httpApi from '../httpApi.js';
 
 export async function getUsers(params={all: true}) {
-    return await httpApi.get(`user/`, params,);
+    return await httpApi.get(`user`, params,);
 }
 
 export async function getUser(params={}) {
-    return await httpApi.get(`user/`, params,);
+    return await httpApi.get(`user`, params,);
 }
 
 export async function getUserById(id, params={}) {

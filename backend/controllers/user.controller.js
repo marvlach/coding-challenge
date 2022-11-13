@@ -5,9 +5,9 @@ import { isEmptyString } from "../utils/common.js";
 // GET Method for one/all users, by token
 export const getUser = async (req, res) => {
     try {
-        const queryString = req.query.all ? {} : {id: req.userId};
+        const queryString = req.query.all ? {} : {_id: req.userId};
         const users = await User.find(queryString).select("-password").lean().exec();
-        res.status(200).json(users);
+        res.status(200).json(req.query.all ? users : users[0]);
     } catch (err) {
         res.status(400).json('Error: ' + err);
     }

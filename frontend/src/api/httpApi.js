@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { getTokenFromLocalStorage } from '../utils/manageLocalStorage';
+import store from '../store/store';
+import { userActions } from '../store/userSlice';
 
 const API_URL = process.env.REACT_APP_API;
 
@@ -11,21 +13,11 @@ export default class httpApi {
     
     
     static checkAuthentication(response) {
-        if (response.status === 401) {
-            /* AppStore.store.dispatch(logout());
-            AppStore.store.dispatch(errorToken(response.data)); */
+        if (response.status === 401 || response.status === 403) {
+            store.dispatch(userActions.logout());
             console.log("not authenticated, should logout");
         }
     }
-    
-    
-    static checkAuthorization(response) {
-        if (response.status === 403) {
-            /* AppStore.store.dispatch(errorToken({ message: response.data.msg })); */
-            console.log("not authorized, stay in");
-        }
-    }
-    
    
     static async makeRequest(config) {
         // if there is token in local storage include authorization header + token
@@ -50,12 +42,14 @@ export default class httpApi {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
                 httpApi.checkAuthentication(error.response);
-                httpApi.checkAuthorization(error.response);
             }
             return Promise.reject(error);
         }
     }
-
+    
+    
+  
+    
     
     static get(url, queryParams, options) {
         let config = {

@@ -7,15 +7,28 @@ import { loginUser } from "../../api/users/userApi";
 import { saveTokenToLocalStorage } from "../../utils/manageLocalStorage";
 import useScrollToTopForAlert from "../../hooks/useScrollToTopForAlert";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserData } from "../../store/userSlice";
+import { useEffect } from "react";
 
 const Login = () => {
 
     const [isLoading, error, sendRequest] = useHttpRequest();
+    const user = useSelector(store => store.user);
     const navigate = useNavigate();
     const location = useLocation();
+    const dispatch = useDispatch();
 
     // hook that scrolls to top when error
     useScrollToTopForAlert(error);
+
+    // if already logged in go to landing page
+    useEffect(() => {
+        console.log('this useEffect')
+        if (user.isAuth) {
+            navigate(`/users`, { replace: true });
+        }
+    }, [user.isAuth, navigate])
 
     // 200 response, assumes i got a token
     const onResponse = (values, resBody) => {
@@ -23,6 +36,9 @@ const Login = () => {
 
         // save token 
         saveTokenToLocalStorage(resBody.token);
+
+        // dispatch get user info
+        dispatch(getUserData());
 
         // redirect to wherever I came from, or to landing page /users
         if (location.state?.from) {
@@ -40,7 +56,6 @@ const Login = () => {
     const onFinishFailed = (error) => {
         console.log('Failed:', error);
     };
-   
 
     return (
     <>

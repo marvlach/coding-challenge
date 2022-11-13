@@ -1,15 +1,18 @@
 import HeaderMenu from '../HeaderMenu/HeaderMenu';
 import SideMenu from '../SideMenu/SideMenu';
 import { Layout } from 'antd';
-import useIsAuthenticated from '../../hooks/useIsAuthenticated';
+import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const { Header, Footer, Sider, Content } = Layout;
 
 const ContextualLayout = (props) => {
 
-    const [isLoggedIn, isLoading, error] = useIsAuthenticated();
+    const user = useSelector(store => store.user);
 
-    const content = !isLoggedIn ?  
+    const location = useLocation();
+    console.log('location', location)
+    const content = !user.isAuth ?  
         <Content> 
             {props.children} 
         </Content> 
@@ -27,7 +30,7 @@ const ContextualLayout = (props) => {
         <>
             <Layout style={{minHeight:"100vh"}} >
                 <Header>
-                    <HeaderMenu isLoggedIn={isLoggedIn}/> 
+                    <HeaderMenu isLoggedIn={user.isAuth}/> 
                 </Header>
                 {content}
                 <Footer style={{ textAlign: 'center', }} >

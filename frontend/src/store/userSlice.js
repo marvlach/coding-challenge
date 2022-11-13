@@ -1,20 +1,50 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { getUser } from '../api/users/userApi';
+import { clearTokenInLocalStorage } from '../utils/manageLocalStorage';
 
 const initialState = {
     data: {}, // for user object
+    loading: false,
+    isAuth: false
 }
+
+export const getUserData = createAsyncThunk('user/getUserData', async () => {
+    const userResponse = await getUser();
+    return userResponse.data;
+})
+
 
 const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setUser(state, {payload}) {
-            state.data = payload
-        },
-        clearUser(state) {
+        logout(state) {
+            state.data = {};
+            state.isAuth = false;
+            state.loading = false;
+            clearTokenInLocalStorage();
+        }
+    },
+    extraReducers: {
+        [getUserData.pending]: (state) => {
+            console.log('getUserData.pending')
+            state.loading = true;
+            state.isAuth = false;
             state.data = {}
         },
-    },
+        [getUserData.fulfilled]: (state, action) => {
+            state.loading = false;
+            state.isAuth = true;
+            state.data = action.payload;
+        },
+        [getUserData.rejected]: (state) => {
+            state.loading = false;
+            state.data = {};
+            state.isAuth = false;
+            clearTokenInLocalStorage();
+        }
+    }
+
     
 })
 
