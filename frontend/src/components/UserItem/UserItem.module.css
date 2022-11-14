@@ -1,0 +1,87 @@
+.user-card {
+    display: flex;
+    flex-direction: row;
+    margin: 1rem;
+    /* background-color: #002766; */
+    border: 1px solid #002766;
+    transition: all 0.3s ease-in-out; 
+}
+
+.user-card span{
+    width: 100%;
+    word-wrap: break-word; 
+}
+
+.user-card:hover {
+    transform: scale(1.01); 
+}
+
+.info-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 60%;
+    margin: 0 1rem ;
+}
+.button-container {
+    padding: 2px;
+    margin: 1px;
+}
+
+.action-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-end;
+    width: 20%;
+    margin: 0 1rem ;
+}
+
+.role-column {
+    display: flex;
+    align-items: center;
+    width: 20%;
+    margin: 0 1rem ;
+}
+
+
+/* 
+.full-name {
+    width: 100%;
+    word-wrap: break-word; 
+}
+
+.full-address {
+    width: 100%;
+    word-wrap: break-word; 
+}
+
+.email {
+    width: 100%;
+    word-wrap: break-word; 
+}
+
+.username {
+    width: 100%;
+    word-wrap: break-word; 
+}
+
+.role {
+    width: 100%;
+    word-wrap: break-word; 
+} */
+
+.meal h3 {
+    margin: 0 0 0.25rem 0;
+}
+
+.description {
+    font-style: italic;
+}
+
+.price {
+    margin-top: 0.25rem;
+    font-weight: bold;
+    color: #ad5502;
+    font-size: 1.25rem;
+}
