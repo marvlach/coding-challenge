@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import useScrollToTopForAlert from "../../hooks/useScrollToTopForAlert";
 import { useNavigate } from "react-router-dom";
 import useIsAuthForPublicRoutes from "../../hooks/useIsAuthForPublicRoutes";
+import UserForm from "../../components/UserForm/UserForm";
 
 const Signup = () => {
     const [isLoading, error, sendRequest] = useHttpRequest();
@@ -60,7 +61,8 @@ const Signup = () => {
 
             <Card className={styles['form-container']} >
                 <h1 className={styles['form-title']}> Signup </h1>
-                <Form 
+                <UserForm mode={'signup'} onFinish={onFinish} onFinishFailed={onFinishFailed}/>
+                {/* <Form 
                     name="signup"
                     layout="vertical"
                     initialValues={{
@@ -328,7 +330,7 @@ const Signup = () => {
                             </Button>
                         </Form.Item>
                     </div>
-                </Form>
+                </Form> */}
             </Card>
         </Spin>}
     </>)

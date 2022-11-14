@@ -80,7 +80,7 @@ const AddUsers = () => {
                     </form>
                 </div>
                 
-                <Collapse defaultActiveKey={['1']} onChange={onPanelChange}>
+                <Collapse defaultActiveKey={['0']} onChange={onPanelChange}>
                     {pannelList}
                 </Collapse>
   
