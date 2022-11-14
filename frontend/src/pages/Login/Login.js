@@ -32,7 +32,8 @@ const Login = () => {
             // navigate(location.state?.from?.pathname ?? `/users`, { replace: true });
         }
 
-        const figureOutState = async () => {
+        const figureOutAuthState = async () => {
+
             // if authenticated, go where i came from
             if (user.isAuth) {
                 navigate(location.state?.from?.pathname ?? `/users`, { replace: true });
@@ -43,16 +44,19 @@ const Login = () => {
                 // if there is a token try to login with it
                 if (getTokenFromLocalStorage()) {
                     await sendRequest(getUser, [], onGetUserResponse) 
+                    // after the request it rerenders
 
                 // if no token
                 } else {
+                    console.log('no infinite loop: boolean is immutable')
                     setShowLoginForm(true);
                 }
             }
         }
 
-        figureOutState().then().catch()
-    }, [dispatch, showLoginForm, location.state?.from?.pathname, navigate, user.isAuth])
+        figureOutAuthState().catch(error => console.log(error));
+        
+    }, [dispatch, showLoginForm, location.state?.from?.pathname, sendRequest, error, navigate, user.isAuth])
     
 
     // 200 response, assumes i got a token
@@ -77,7 +81,7 @@ const Login = () => {
     };
 
     return (
-    <>  { showLoginForm && 
+    <>  { (showLoginForm || error)  && 
         <Spin tip="Loading..." spinning={isLoading} >
             {error && <Alert message={error} type="error" showIcon closable />}
 

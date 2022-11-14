@@ -20,8 +20,9 @@ const useHttpRequest = () =>  {
             responseCallback(response.data);
 
         } catch (error) {
+            console.log('error useHttpo', error);
             // prioritize backend error
-            setError(error?.response?.data || error.message || 'Something went wrong!');
+            setError(error?.response?.data?.message || error.message || 'Something went wrong!');
         } finally {
             setIsLoading(false);
         }
