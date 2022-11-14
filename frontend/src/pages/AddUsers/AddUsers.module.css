@@ -1,0 +1,9 @@
+.form-container {
+    width: 60rem;
+    margin: 1rem auto;
+    margin-top: 5rem;
+}
+
+.form-title {
+    text-align: center;
+}

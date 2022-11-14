@@ -6,6 +6,7 @@ import Signup from '../pages/Signup/Signup';
 import ProtectedRoute from './ProtectedRoute';
 import UserProfile from '../pages/UserProfile/UserProfile';
 import Users from '../pages/Users/Users';
+import AddUsers from '../pages/AddUsers/AddUsers';
 
 const Routing = () => {
     return (  
@@ -17,6 +18,7 @@ const Routing = () => {
             <Route element={<ProtectedRoute />}>
                 <Route path="/users" element={<Users />} />
                 <Route path="/users/:userId" element={<UserProfile />} />
+                <Route path="/users/add" element={<AddUsers />} />
             </Route>
             <Route path="*" element={<NotFound />} />
         </Routes>
