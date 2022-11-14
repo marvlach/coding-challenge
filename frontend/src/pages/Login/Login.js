@@ -3,61 +3,20 @@ import styles from './Login.module.css';
 import { InboxOutlined, LockOutlined} from '@ant-design/icons';
 import { Avatar } from 'antd';
 import useHttpRequest from "../../hooks/useHttpRequest";
-import { getUser, loginUser } from "../../api/users/userApi";
-import { getTokenFromLocalStorage, saveTokenToLocalStorage } from "../../utils/manageLocalStorage";
+import { loginUser } from "../../api/users/userApi";
+import { saveTokenToLocalStorage } from "../../utils/manageLocalStorage";
 import useScrollToTopForAlert from "../../hooks/useScrollToTopForAlert";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { userActions } from "../../store/userSlice";
+import useIsAuthForPublicRoutes from "../../hooks/useIsAuthForPublicRoutes";
 
 const Login = () => {
 
     const [isLoading, error, sendRequest] = useHttpRequest();
-    const [showLoginForm, setShowLoginForm] = useState(undefined);
-    const user = useSelector(store => store.user);
-    const navigate = useNavigate();
-    const location = useLocation();
-    const dispatch = useDispatch();
-    console.log('i came from ', location.state?.from?.pathname)
+    // const [showLoginForm, setShowLoginForm] = useState(undefined);
+    const [stay, setStay, authIsLoading, authError] = useIsAuthForPublicRoutes();
 
     // hook that scrolls to top when error
     useScrollToTopForAlert(error);
 
-    useEffect(() => {
-        // successfully used token to get userData
-        const onGetUserResponse = (userData) => {
-            console.log('successfully used token to get userData')
-            dispatch(userActions.setUser(userData));
-            // navigate(location.state?.from?.pathname ?? `/users`, { replace: true });
-        }
-
-        const figureOutAuthState = async () => {
-
-            // if authenticated, go where i came from
-            if (user.isAuth) {
-                navigate(location.state?.from?.pathname ?? `/users`, { replace: true });
-            
-            // if not authenticated
-            } else {
-
-                // if there is a token try to login with it
-                if (getTokenFromLocalStorage()) {
-                    await sendRequest(getUser, [], onGetUserResponse) 
-                    // after the request it rerenders
-
-                // if no token
-                } else {
-                    console.log('no infinite loop: boolean is immutable')
-                    setShowLoginForm(true);
-                }
-            }
-        }
-
-        figureOutAuthState().catch(error => console.log(error));
-        
-    }, [dispatch, showLoginForm, location.state?.from?.pathname, sendRequest, error, navigate, user.isAuth])
-    
 
     // 200 response, assumes i got a token
     const onResponse = (values, resBody) => {
@@ -66,8 +25,8 @@ const Login = () => {
         // save token 
         saveTokenToLocalStorage(resBody.token);
 
-        // hide form
-        setShowLoginForm(false);
+        // hide form, and reevaluate useIsAuthForPublicRoutes 
+        setStay(false);
 
     }
 
@@ -81,9 +40,9 @@ const Login = () => {
     };
 
     return (
-    <>  { (showLoginForm || error)  && 
-        <Spin tip="Loading..." spinning={isLoading} >
-            {error && <Alert message={error} type="error" showIcon closable />}
+    <>  { (stay || authError)  && 
+        <Spin tip="Loading..." spinning={isLoading || authIsLoading} >
+            {error && <Alert style={{width: '90%', margin: '1rem auto'}} message={error} type="error" showIcon closable banner/>}
 
             <Card className={styles['form-container']} >
                 <h1 className={styles['form-title']}> Login </h1>

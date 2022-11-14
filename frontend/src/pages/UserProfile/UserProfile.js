@@ -29,7 +29,7 @@ const UserProfile = () => {
 
     return (
         <Spin tip="Loading..." spinning={isLoading} >
-            {error && <Alert message={error} type="error" showIcon closable />}
+            {error && <Alert style={{width: '90%', margin: '1rem auto'}} message={error} type="error" showIcon banner closable />}
 
             <Card className={styles['profile-container']} >
                 <h1 className={styles['profile-title']}> User Profile </h1>

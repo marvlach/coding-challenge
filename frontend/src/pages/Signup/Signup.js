@@ -52,9 +52,9 @@ const Signup = () => {
     <>
         <Spin tip="Loading..." spinning={isLoading} >
 
-            {error && <Alert message={error} type="error" showIcon closable />}
+            {error && <Alert style={{width: '90%', margin: '1rem auto'}} message={error} type="error" showIcon closable banner />}
 
-            {success && <Alert message={success} type="success" showIcon closable />}
+            {success && <Alert style={{width: '90%', margin: '1rem auto'}} message={success} type="success" showIcon closable banner/>}
 
             <Card className={styles['form-container']} >
                 <h1 className={styles['form-title']}> Signup </h1>
