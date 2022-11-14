@@ -8,7 +8,7 @@ const ProtectedRoute = ({ children, }) => {
     const user = useSelector(store => store.user);
     const location = useLocation();
 
-    if (!user.isAuth && !user.loading) {
+    if (!user.isAuth) {
         console.log('ProtectedRoute navigated to login', user)
         return <Navigate to='/login' replace={true} state={{from: location}}/>;
     }

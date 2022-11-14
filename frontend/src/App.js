@@ -11,11 +11,11 @@ function App() {
 	const user = useSelector(store => store.user);
 	console.log('Whole app rerenders');
 
-	useEffect(() => {
+	/* useEffect(() => {
 		if (!user.isAuth && getTokenFromLocalStorage()) {
 			dispatch(getUserData());
 		}
-	}, [user.isAuth, dispatch]);
+	}, [user.isAuth, dispatch]); */
 
 	return (
 		<>

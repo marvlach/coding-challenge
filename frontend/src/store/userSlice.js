@@ -4,14 +4,13 @@ import { clearTokenInLocalStorage } from '../utils/manageLocalStorage';
 
 const initialState = {
     data: {}, // for user object
-    loading: false,
     isAuth: false
 }
-
+/* 
 export const getUserData = createAsyncThunk('user/getUserData', async () => {
     const userResponse = await getUser();
     return userResponse.data;
-})
+}) */
 
 
 const userSlice = createSlice({
@@ -21,10 +20,14 @@ const userSlice = createSlice({
         logout(state) {
             state.data = {};
             state.isAuth = false;
-            state.loading = false;
             clearTokenInLocalStorage();
+        },
+        setUser(state, { payload }){
+            state.data = payload;
+            state.isAuth = true;
         }
-    },
+
+    },/* 
     extraReducers: {
         [getUserData.pending]: (state) => {
             console.log('getUserData.pending')
@@ -44,7 +47,7 @@ const userSlice = createSlice({
             clearTokenInLocalStorage();
         }
     }
-
+ */
     
 })
 

@@ -3,31 +3,57 @@ import styles from './Login.module.css';
 import { InboxOutlined, LockOutlined} from '@ant-design/icons';
 import { Avatar } from 'antd';
 import useHttpRequest from "../../hooks/useHttpRequest";
-import { loginUser } from "../../api/users/userApi";
-import { saveTokenToLocalStorage } from "../../utils/manageLocalStorage";
+import { getUser, loginUser } from "../../api/users/userApi";
+import { getTokenFromLocalStorage, saveTokenToLocalStorage } from "../../utils/manageLocalStorage";
 import useScrollToTopForAlert from "../../hooks/useScrollToTopForAlert";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserData } from "../../store/userSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { userActions } from "../../store/userSlice";
 
 const Login = () => {
 
     const [isLoading, error, sendRequest] = useHttpRequest();
+    const [showLoginForm, setShowLoginForm] = useState(undefined);
     const user = useSelector(store => store.user);
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
     console.log('i came from ', location.state?.from?.pathname)
+
     // hook that scrolls to top when error
     useScrollToTopForAlert(error);
 
-    // if already logged in go to landing page
     useEffect(() => {
-        if (user.isAuth) {
-            navigate(location.state?.from?.pathname ?? `/users`, { replace: true });
+        // successfully used token to get userData
+        const onGetUserResponse = (userData) => {
+            console.log('successfully used token to get userData')
+            dispatch(userActions.setUser(userData));
+            // navigate(location.state?.from?.pathname ?? `/users`, { replace: true });
         }
-    }, [user.isAuth, navigate])
+
+        const figureOutState = async () => {
+            // if authenticated, go where i came from
+            if (user.isAuth) {
+                navigate(location.state?.from?.pathname ?? `/users`, { replace: true });
+            
+            // if not authenticated
+            } else {
+
+                // if there is a token try to login with it
+                if (getTokenFromLocalStorage()) {
+                    await sendRequest(getUser, [], onGetUserResponse) 
+
+                // if no token
+                } else {
+                    setShowLoginForm(true);
+                }
+            }
+        }
+
+        figureOutState().then().catch()
+    }, [dispatch, showLoginForm, location.state?.from?.pathname, navigate, user.isAuth])
+    
 
     // 200 response, assumes i got a token
     const onResponse = (values, resBody) => {
@@ -36,15 +62,9 @@ const Login = () => {
         // save token 
         saveTokenToLocalStorage(resBody.token);
 
-        // dispatch get user info
-        dispatch(getUserData());
+        // hide form
+        setShowLoginForm(false);
 
-        // redirect to wherever I came from, or to landing page /users
-        if (location.state?.from?.pathname) {
-            navigate(location.state.from.pathname, { replace: true })
-        } else {
-            navigate(`/users`, { replace: true })
-        }
     }
 
     const onFinish = async (values) => {
@@ -57,7 +77,7 @@ const Login = () => {
     };
 
     return (
-    <>
+    <>  { showLoginForm && 
         <Spin tip="Loading..." spinning={isLoading} >
             {error && <Alert message={error} type="error" showIcon closable />}
 
@@ -119,7 +139,7 @@ const Login = () => {
                     </div>
                 </Form>
             </Card>
-        </Spin>
+        </Spin>}
     </>)
 }
 
