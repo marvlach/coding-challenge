@@ -11,7 +11,6 @@ import useIsAuthForPublicRoutes from "../../hooks/useIsAuthForPublicRoutes";
 const Login = () => {
 
     const [isLoading, error, sendRequest] = useHttpRequest();
-    // const [showLoginForm, setShowLoginForm] = useState(undefined);
     const [stay, setStay, authIsLoading, authError] = useIsAuthForPublicRoutes();
 
     // hook that scrolls to top when error

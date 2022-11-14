@@ -6,9 +6,11 @@ import { validateNoStartEndSpaces } from "../../utils/antdFormFieldValidators";
 import { useEffect, useState } from "react";
 import useScrollToTopForAlert from "../../hooks/useScrollToTopForAlert";
 import { useNavigate } from "react-router-dom";
+import useIsAuthForPublicRoutes from "../../hooks/useIsAuthForPublicRoutes";
 
 const Signup = () => {
     const [isLoading, error, sendRequest] = useHttpRequest();
+    const [stay, setStay, authIsLoading, authError] = useIsAuthForPublicRoutes();
     const [success, setSuccess] = useState(null);
     const navigate = useNavigate();
 
@@ -49,8 +51,8 @@ const Signup = () => {
     };
 
     return (
-    <>
-        <Spin tip="Loading..." spinning={isLoading} >
+    <>{ (stay || authError)  && 
+        <Spin tip="Loading..." spinning={isLoading || authIsLoading} >
 
             {error && <Alert style={{width: '90%', margin: '1rem auto'}} message={error} type="error" showIcon closable banner />}
 
@@ -328,7 +330,7 @@ const Signup = () => {
                     </div>
                 </Form>
             </Card>
-        </Spin>
+        </Spin>}
     </>)
 }
 
