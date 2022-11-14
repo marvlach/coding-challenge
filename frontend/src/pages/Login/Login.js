@@ -18,15 +18,14 @@ const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
-
+    console.log('i came from ', location.state?.from?.pathname)
     // hook that scrolls to top when error
     useScrollToTopForAlert(error);
 
     // if already logged in go to landing page
     useEffect(() => {
-        console.log('this useEffect')
         if (user.isAuth) {
-            navigate(`/users`, { replace: true });
+            navigate(location.state?.from?.pathname ?? `/users`, { replace: true });
         }
     }, [user.isAuth, navigate])
 
@@ -41,8 +40,8 @@ const Login = () => {
         dispatch(getUserData());
 
         // redirect to wherever I came from, or to landing page /users
-        if (location.state?.from) {
-            navigate(location.state.from)
+        if (location.state?.from?.pathname) {
+            navigate(location.state.from.pathname, { replace: true })
         } else {
             navigate(`/users`, { replace: true })
         }

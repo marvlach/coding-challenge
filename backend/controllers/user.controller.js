@@ -16,8 +16,12 @@ export const getUser = async (req, res) => {
 // GET Method for one user
 export const getUserById = async (req, res) => {
     try {
-        
-        res.json(foundUser);
+        // subject user asks for object
+        const subjectUserId = req.userId;
+        const objectUserId = req.params.userId;
+        const objectFoundUser = await User.findById(objectUserId).select("-password").lean().exec();
+        objectFoundUser.requestedBy = subjectUserId;
+        res.status(200).json(objectFoundUser);
 
     } catch (err) {
         res.status(400).json('Error: ' + err)

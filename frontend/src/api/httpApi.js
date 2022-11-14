@@ -35,7 +35,6 @@ export default class httpApi {
 
         try {
             const response = await this.instance(requestConfig);
-            console.log('superclass', response);
             return response;
         } catch (error) {
             if (error.response) {

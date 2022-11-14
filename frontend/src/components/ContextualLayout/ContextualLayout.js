@@ -11,8 +11,7 @@ const ContextualLayout = (props) => {
     const user = useSelector(store => store.user);
 
     const location = useLocation();
-    console.log('location', location)
-    const content = !user.isAuth ?  
+    const content = !user.isAuth || location.pathname === '/'?  
         <Content> 
             {props.children} 
         </Content> 
@@ -30,7 +29,7 @@ const ContextualLayout = (props) => {
         <>
             <Layout style={{minHeight:"100vh"}} >
                 <Header>
-                    <HeaderMenu isLoggedIn={user.isAuth}/> 
+                    <HeaderMenu user={user}/> 
                 </Header>
                 {content}
                 <Footer style={{ textAlign: 'center', }} >

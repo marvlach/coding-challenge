@@ -2,12 +2,18 @@ import { Menu } from 'antd';
 import { HomeOutlined, UserAddOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons';
 import styles from './HeaderMenu.module.css';
 import { Link, useLocation } from 'react-router-dom';
+import store from '../../store/store';
+import { userActions } from '../../store/userSlice';
 
-
-const HeaderMenu = ({isLoggedIn}) => {
+const HeaderMenu = ({ user }) => {
     const location = useLocation();
     const { pathname } = location;
 
+    const handleLogout = ({ key }) => {
+        if (key === '/logout') {
+            store.dispatch(userActions.logout())
+        }
+    }
 
     const notLoggedInMenuItems = [
         {
@@ -38,12 +44,17 @@ const HeaderMenu = ({isLoggedIn}) => {
         {
             key: '/user',
             icon: <UserAddOutlined />,
-            label: 'Marios',
+            label: user.data.username,
             children: [
                 {
                     key: '/profile',
                     icon: <UserOutlined />,
-                    label: 'Profile',
+                    label: <Link to={`/users/${user.data['_id']}`}> My Profile </Link>,
+                },
+                {
+                    key: '/users',
+                    icon: <UserOutlined />,
+                    label: <Link to='/users'> Users List </Link>,
                 },
                 {
                     key: '/logout',
@@ -62,7 +73,8 @@ const HeaderMenu = ({isLoggedIn}) => {
             selectedKeys={[pathname]} 
             theme="dark" 
             mode="horizontal" 
-            items={!isLoggedIn ? notLoggedInMenuItems : loggedInMenuItems}
+            items={!user.isAuth ? notLoggedInMenuItems : loggedInMenuItems}
+            onClick={handleLogout}
         />
     )
 }
