@@ -9,7 +9,7 @@ export const getUser = async (req, res) => {
         const users = await User.find(queryString).select("-password").lean().exec();
         res.status(200).json(req.query.all ? users : users[0]);
     } catch (err) {
-        res.status(400).json('Error: ' + err);
+        res.status(400).json({ message: err.message });
     }
 }
 
@@ -20,11 +20,17 @@ export const getUserById = async (req, res) => {
         const subjectUserId = req.userId;
         const objectUserId = req.params.userId;
         const objectFoundUser = await User.findById(objectUserId).select("-password").lean().exec();
+
+        if (!objectFoundUser) {
+            throw new Error("Could not find user");        
+        }
+
         objectFoundUser.requestedBy = subjectUserId;
         res.status(200).json(objectFoundUser);
 
     } catch (err) {
-        res.status(400).json('Error: ' + err)
+        console.log(err.message)
+        res.status(400).json({ message: err.message })
     }
 
 }
@@ -41,7 +47,7 @@ export const createUser = async (req, res) => {
         res.status(200).json({ message: "User created successfully." });
 
     } catch (err) {
-        res.status(400).json('Error: ' + err);
+        res.status(400).json({ message: err.message });
     }
 
 }
@@ -67,6 +73,6 @@ export const authUser = async (req, res) => {
         
 
     } catch (err) {
-        res.status(400).json('Error: ' + err)
+        res.status(400).json({ message: err.message })
     }
 }

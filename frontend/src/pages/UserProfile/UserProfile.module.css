@@ -1,0 +1,16 @@
+.profile-container {
+    width: 50rem;
+    margin: 1rem auto;
+    margin-top: 5rem;
+}
+
+.profile-title {
+    text-align: center;
+}
+
+.user-info {
+    max-width: 60rem;
+    width: 90%;
+    margin: 1rem auto;
+    animation: users-appear 1s ease-out forwards;
+}
