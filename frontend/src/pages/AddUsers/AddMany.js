@@ -1,8 +1,10 @@
 import { Spin, Card, Alert, Button, Collapse, Form, Input } from "antd";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { createUser } from "../../api/users/userApi";
 import UserForm from "../../components/UserForm/UserForm";
 import useHttpRequest from "../../hooks/useHttpRequest";
+import useScrollToTopForAlert from "../../hooks/useScrollToTopForAlert";
 import { csvFileToArray } from "../../utils/manageCsvFile";
 import styles from './AddUsers.module.css';
 const { Panel } = Collapse;
@@ -13,7 +15,12 @@ const AddMany = () => {
     const [file, setFile] = useState();
     const [usersFromFile, setUsersFromFile] = useState([]);
     const [showAddMultipleForm, setShowAddMultipleForm] = useState(false);
+    const navigate = useNavigate();
     const fileReader = new FileReader();
+
+
+    // hook that scrolls to top when error, success
+    useScrollToTopForAlert(error, success);
 
     // once users have been uploaded by file, hide csv form, show Collapse form
     useEffect( () => {
@@ -22,14 +29,28 @@ const AddMany = () => {
         } 
     }, [usersFromFile])
 
+    // wait 1.5sec to see message and redirect to /users
+        useEffect(() => {
+
+            if (!success) {
+                return
+            }
+            const timer = setTimeout(() => {
+                navigate("/users");
+            }, 1500);
+
+            return () => {
+                clearTimeout(timer)
+            }
+        }, [navigate, success]);
+
+
     // Cancel or choose another file
     const handleCancel = () => {
         setShowAddMultipleForm(false);
         setFile();
         setUsersFromFile([])
     }
-
-    
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -66,7 +87,7 @@ const AddMany = () => {
 
     // 200 ok response
     const onResponse = (values, resBody) => {
-        setSuccess('The user has been created. You will be redirected to the users page.');
+        setSuccess('The users have been created. You will be redirected to the users page.');
     }
 
     // form fields are ok: send request
@@ -88,13 +109,7 @@ const AddMany = () => {
     };
 
     console.log(usersFromFile)
-    const pannelList = usersFromFile?.map((user, index) => <>
-            <Panel header="This is panel header 1" key={index}>
-                <p>{user.Nachname}</p>
-                <UserForm mode={'addMany'}/>
-            </Panel>
-        </>
-    )
+    
 
     return (
         <Spin tip="Loading..." spinning={isLoading} >

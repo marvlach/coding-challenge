@@ -65,7 +65,33 @@ export const createUser = async (req, res) => {
         const subjectUserId = req.userId;
         
         // expects an array of objects
-        const createdUsers = await User.insertMany(req.body);
+        const usersToAdd = req.body;
+
+        // get all emails and usernames
+        const allEmails = usersToAdd.map(user => user.email);
+        const allUsernames = usersToAdd.map(user => user.username);
+        
+        // find dups within emails
+        const dupEmails = allEmails.filter((item, index) => allEmails.indexOf(item) !== index);
+
+        // find dups within usernames
+        const dupUsernames = allUsernames.filter((item, index) => allUsernames.indexOf(item) !== index);
+
+        if (dupEmails.length > 0 || dupUsernames.length > 0) {
+            throw new Error(`There are duplicates withing your form. Aborting`);
+        }
+
+        // find username, email dups in DB
+        const dupsDB = await User.find( { $or: [ 
+            { username: { $in: allUsernames } }, 
+            { email: { $in: allEmails } } 
+        ]});
+
+        if (dupsDB.length) {
+            throw new Error(`User with username: ${dupsDB[0].username} and email: ${dupsDB[0].email} already exist. Aborting`);
+        }
+
+        const createdUsers = await User.insertMany(usersToAdd);
         
         res.status(200).json({ message: "User(s) created successfully." });
 
@@ -81,7 +107,6 @@ export const authUser = async (req, res) => {
     try {
         const foundUser = await User.findOne({ email: req.body.email }).exec();
 
-        // 
         if (!foundUser) {
             throw new Error("Wrong credentials");
         }

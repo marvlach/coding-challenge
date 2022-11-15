@@ -21,7 +21,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://localhost:27888/', {
+mongoose.connect('mongodb://localhost:27017/', {
     dbName: 'CCDB',
     useNewUrlParser: true,
     useUnifiedTopology: true
