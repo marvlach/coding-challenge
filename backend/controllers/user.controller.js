@@ -124,3 +124,50 @@ export const authUser = async (req, res) => {
         res.status(400).json({ message: err.message })
     }
 }
+
+export const updateUser = async (req, res) => {
+    try {
+
+        // new Info
+        const { username, firstName, lastName, email, address, role } = req.body;
+
+        // subject user updates object user
+        const subjectUserId = req.userId;
+        const userToUpdate = req.params.userId;
+
+        console.log(subjectUserId, userToUpdate);
+
+        const updatedUser = await User.findOneAndUpdate({ _id: userToUpdate }, 
+            {username, firstName, lastName, email, address, role}).select('-password');
+
+        if (!updatedUser) {
+            throw new Error("User does not exist");
+        } 
+        
+        res.status(200).json({data: updatedUser, message: 'User updated successfully.'});
+
+    } catch (error) {
+        res.status(400).json({ message: err.message })
+    }
+}
+
+export const deleteUser = async (req, res) => {
+    try {
+        // subject user deletes object user
+        const subjectUserId = req.userId;
+        const userToDelete = req.params.userId;
+
+        console.log(subjectUserId, userToUpdate);
+
+        const deletedUser = await User.findOneAndDelete({ _id: userToDelete }).select('-password');
+
+        if (!deletedUser) {
+            throw new Error("User does not exist");
+        } 
+        
+        res.status(200).json({data: deletedUser, message: 'User updated successfully.'});
+
+    } catch (error) {
+        res.status(400).json({ message: err.message })
+    }
+}
