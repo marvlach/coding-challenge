@@ -94,10 +94,6 @@ const UserForm = ({ mode, field }) => {
                     style={{ display: 'inline-block', width: 'calc(70% - 4px)', margin: '0 4px 0 0'}}
                     rules={[
                         {
-                        required: true,
-                        message: 'Please provide your street!',
-                        },
-                        {
                             validator: validateNoStartEndSpaces
                         }
                     ]}
@@ -112,10 +108,6 @@ const UserForm = ({ mode, field }) => {
                     name={field ? [field.name, 'number'] : 'number'}
                     style={{ display: 'inline-block', width: 'calc(30% - 4px)', margin: '0  0 0 4px'}}
                     rules={[
-                        {
-                        required: true,
-                        message: 'Please provide your street number!',
-                        },
                         {
                             validator: validateNoStartEndSpaces
                         }
@@ -134,10 +126,6 @@ const UserForm = ({ mode, field }) => {
                     style={{ display: 'inline-block', width: 'calc(40% - 4px )', margin: '0 4px 0 0' }}
                     rules={[
                         {
-                        required: true,
-                        message: 'Please provide your city!',
-                        },
-                        {
                             validator: validateNoStartEndSpaces
                         }
                     ]}
@@ -153,10 +141,6 @@ const UserForm = ({ mode, field }) => {
                     style={{ display: 'inline-block', width: 'calc(20% - 4px )', margin: '0 2px 0 2px' }}
                     rules={[
                         {
-                        required: true,
-                        message: 'Please provide your zip code!',
-                        },
-                        {
                             validator: validateNoStartEndSpaces
                         }
                     ]}
@@ -171,10 +155,6 @@ const UserForm = ({ mode, field }) => {
                     name={field ? [field.name, 'country'] : 'country'}
                     style={{ display: 'inline-block', width: 'calc(40% - 4px)', margin: '0 0 0 4px' }}
                     rules={[
-                        {
-                        required: true,
-                        message: 'Please provide your country!',
-                        },
                         {
                             validator: validateNoStartEndSpaces
                         }

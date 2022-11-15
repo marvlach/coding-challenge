@@ -71,10 +71,15 @@ const AddMany = () => {
 
     // form fields are ok: send request
     const onFinish = async (values) => {
-        const { username, email, role, password, passwordRe, firstName, lastName, ...address} = values;
-        const args = [{username, email, password, firstName, lastName, role, address}] // endpoint expects multiple
+        console.log(values.users)
+
+        const args = values.users.map(user => {
+            const { username, email, role, password, passwordRe, firstName, lastName, ...address} = user;
+            return {username, email, password, firstName, lastName, role, address}
+        })
+                
         console.log(args);
-        // await sendRequest(createUser, [args], onResponse.bind(null, args));
+        await sendRequest(createUser, [args], onResponse.bind(null, args));
     }
 
     // form fields not ok
@@ -129,18 +134,22 @@ const AddMany = () => {
                         scrollToFirstError
                     >             
                     
-                        {/* <Collapse defaultActiveKey={['0']} onChange={onPanelChange}> */}       
+                              
                             <Form.List name="users">
                                 {(fields, actions) => (
                                     <>
                                     
                                     {fields.map(field => (
-                                            <UserForm mode={'addMany'} key={field.key} field={field}/>
+                                        <Collapse key={field.key} defaultActiveKey={['0']} onChange={onPanelChange}>
+                                            <Panel header={`User ${field.key + 1}`} key={field.key}>
+                                                <UserForm mode={'addMany'} key={field.key} field={field}/>
+                                            </Panel>
+                                        </Collapse>
                                     ))}                                
                                 </>
                                 )}
                             </Form.List>
-                        {/* </Collapse> */}        
+                              
                         <Form.Item>
                             <Button type="primary" htmlType="submit">
                             Submit
