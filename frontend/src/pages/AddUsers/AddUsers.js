@@ -1,91 +1,31 @@
-import { Spin, Card, Alert, Button, Collapse } from "antd";
+import { Card, Radio } from "antd";
 import { useState } from "react";
-import useHttpRequest from "../../hooks/useHttpRequest";
+import AddMany from "./AddMany";
+import AddOne from "./AddOne";
 import styles from './AddUsers.module.css';
-const { Panel } = Collapse;
 
 const AddUsers = () => {
-    const [isLoading, error, sendRequest] = useHttpRequest();
-    const [file, setFile] = useState();
-    const [usersFromFile, setUsersFromFile] = useState([]);
-
-    const fileReader = new FileReader();
-
-    const onPanelChange = (key) => {
-        console.log(key);
-    };
-
-    const csvFileToArray = string => {
-        const csvHeader = string.slice(0, string.indexOf("\n")).split(";");
-        const csvRows = string.slice(string.indexOf("\n") + 1).split("\n");
-        console.log('csvHeader', csvHeader)
-        console.log('csvRows', csvRows)
-        const array = csvRows.map(i => {
-            const values = i.split(";");
-            const obj = csvHeader.reduce((object, header, index) => {
-                object[header] = values[index];
-                return object;
-            }, {});
-            return obj;
-        });
-
-        setUsersFromFile(array);
-    };
-
-    const handleOnChange = (e) => {
-        setFile(e.target.files[0]);
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        if (!file) {
-            return
-        }
-        
-        fileReader.onload = function (event) {
-            const csvOutput = event.target.result;
-            console.log(csvOutput)
-            csvFileToArray(csvOutput);
-        };
-
-        fileReader.readAsText(file);
-        
-    }
-    console.log(usersFromFile)
-    const pannelList = usersFromFile?.map((user, index) => 
-        <Panel header="This is panel header 1" key={index}>
-            <p>{user.Nachname}</p>
-        </Panel>
-    )
     
+    const [value, setValue] = useState(1);    
+    
+    const onChange = (e) => {
+        setValue(e.target.value)
+    };
+
     return (
         <>
-            <Spin tip="Loading..." spinning={isLoading} >
-            {error && <Alert style={{width: '90%', margin: '1rem auto'}} message={error} type="error" showIcon banner closable />}
-
-            <Card className={styles['form-container']} >
+            <Card className={styles['radio-container']} >
                 <h1 className={styles['form-title']}> Add New Users </h1>
                 <div style={{ textAlign: "center" }}>
-                    <h1>REACTJS CSV IMPORT EXAMPLE </h1>
-                    <form>
-                        <input
-                            type={"file"}
-                            id={"csvFileInput"}
-                            accept={".csv"}
-                            onChange={handleOnChange}
-                        />
-
-                        <Button onClick={handleSubmit} > IMPORT CSV </Button>
-                    </form>
+                    <Radio.Group onChange={onChange} value={value}>
+                        <Radio value={1}>Add One User</Radio>
+                        <Radio value={2}>Add Multiple with .csv</Radio>
+                    </Radio.Group>
                 </div>
-                
-                <Collapse defaultActiveKey={['0']} onChange={onPanelChange}>
-                    {pannelList}
-                </Collapse>
-  
             </Card>
-        </Spin>
+
+            {value === 1 && <AddOne />}
+            {value === 2 && <AddMany />}    
         </>
     )
 }

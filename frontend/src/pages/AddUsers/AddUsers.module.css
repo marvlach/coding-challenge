@@ -1,7 +1,13 @@
 .form-container {
-    width: 60rem;
+    width: 35rem;
     margin: 1rem auto;
-    margin-top: 5rem;
+    margin-top: 1rem;
+}
+
+.radio-container {
+    width: 35rem;
+    margin: 1rem auto;
+    margin-top: 3rem;
 }
 
 .form-title {

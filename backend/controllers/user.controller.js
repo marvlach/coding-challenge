@@ -1,13 +1,15 @@
 import User from "../models/user.model.js";
 import { generateToken } from "../utils/generateToken.js";
-import { isEmptyString } from "../utils/common.js";
 
 // GET Method for one/all users, by token
 export const getUser = async (req, res) => {
     try {
         const queryString = req.query.all ? {} : {_id: req.userId};
+
         const users = await User.find(queryString).select("-password").lean().exec();
+
         res.status(200).json(req.query.all ? users : users[0]);
+
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
@@ -19,14 +21,16 @@ export const getUserById = async (req, res) => {
         // subject user asks for object
         const subjectUserId = req.userId;
         const objectUserId = req.params.userId;
-        const objectFoundUser = await User.findById(objectUserId).select("-password").lean().exec();
 
-        if (!objectFoundUser) {
+        const foundObjectUsers = await User.findById(objectUserId).select("-password").lean().exec();
+
+        if (!foundObjectUsers) {
             throw new Error("Could not find user");        
         }
 
-        objectFoundUser.requestedBy = subjectUserId;
-        res.status(200).json(objectFoundUser);
+        foundObjectUsers.requestedBy = subjectUserId;
+
+        res.status(200).json(foundObjectUsers);
 
     } catch (err) {
         console.log(err.message)
@@ -37,7 +41,7 @@ export const getUserById = async (req, res) => {
 
 
 // POST method for signup
-export const createUser = async (req, res) => {
+export const signupUser = async (req, res) => {
 
     try {
         const { username, firstName, lastName, email, password, address, role } = req.body;
@@ -47,6 +51,26 @@ export const createUser = async (req, res) => {
         res.status(200).json({ message: "User created successfully." });
 
     } catch (err) {
+        // should filter some errors here
+        res.status(400).json({ message: err.message });
+    }
+
+}
+
+// POST method for creating users
+export const createUser = async (req, res) => {
+
+    try {
+        // subject user creates user
+        const subjectUserId = req.userId;
+        
+        // expects an array of objects
+        const createdUsers = await User.insertMany(req.body);
+        
+        res.status(200).json({ message: "User(s) created successfully." });
+
+    } catch (err) {
+        // should filter some errors here
         res.status(400).json({ message: err.message });
     }
 
@@ -71,7 +95,6 @@ export const authUser = async (req, res) => {
         const token = generateToken(foundUser.id);
         res.status(200).json({token: token});
         
-
     } catch (err) {
         res.status(400).json({ message: err.message })
     }

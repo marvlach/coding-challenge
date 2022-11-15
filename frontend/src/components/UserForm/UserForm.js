@@ -3,21 +3,11 @@ import styles from './UserForm.module.css';
 import { validateNoStartEndSpaces } from "../../utils/antdFormFieldValidators";
 
 
-// mode can be 'signup', 'addOne', 'addMany'. If addMany, I also get props.initalValues
-const UserForm = ({ mode, initialValues, onFinish, onFinishFailed }) => { 
-
-    const initialFormValues = (initialValues && mode === 'addMany') ? {...initialValues, remember: true,} : {remember: true,};
+// mode can be 'signup', 'addOne', 'addMany'. 
+const UserForm = ({ mode }) => { 
     
     return (
-        <Form 
-            name={mode}
-            layout="vertical"
-            initialValues={initialFormValues}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off"
-            scrollToFirstError
-        >
+        <>    
             <Form.Item
                 name="username"
                 label="Username"
@@ -196,8 +186,29 @@ const UserForm = ({ mode, initialValues, onFinish, onFinishFailed }) => {
                 </Form.Item>
             </Form.Item>
         
-            
+            {mode !== 'signup' && <> 
 
+                <Form.Item
+                    name="password"
+                    label="Password (This is default password. Please notify the user to change it)"
+                    rules={[
+                    {
+                        required: true,
+                        message: 'Please input your password!'
+                    },
+                    ]}
+                >
+                    <Input.Password
+                        disabled={true}
+                        visibilityToggle={{ visible: true/* , onVisibleChange: () => {} */ }}
+                    />
+
+                </Form.Item>
+            
+            
+            </>}
+
+            {mode === 'signup' && <>
             <Form.Item
                 name="password"
                 label="Password"
@@ -247,7 +258,7 @@ const UserForm = ({ mode, initialValues, onFinish, onFinishFailed }) => {
                 <Input.Password
                     placeholder="Re-Enter Password"
                 />
-            </Form.Item>
+            </Form.Item> </>}
             
             <Form.Item
                 name="role"
@@ -272,11 +283,11 @@ const UserForm = ({ mode, initialValues, onFinish, onFinishFailed }) => {
             <div className={styles['button-container']}>
                 <Form.Item > 
                     <Button type="primary" htmlType="submit" >
-                        Sign Up
+                        {mode === 'signup' ? 'Sign Up' : 'Create User'}
                     </Button>
                 </Form.Item>
             </div>}
-        </Form>
+        </>
     )
 }
 
