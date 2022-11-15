@@ -8,6 +8,22 @@ import { useNavigate } from "react-router-dom";
 import useIsAuthForPublicRoutes from "../../hooks/useIsAuthForPublicRoutes";
 import UserForm from "../../components/UserForm/UserForm";
 
+const initialValues = {
+    username: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    street: "",
+    number: "",
+    city: "",
+    code: "",
+    country: "",
+    role:"",
+    password: "",
+    passwordRe:"",
+    remember: true,
+}
+
 const Signup = () => {
     const [isLoading, error, sendRequest] = useHttpRequest();
     const [stay, setStay, authIsLoading, authError] = useIsAuthForPublicRoutes();
@@ -64,9 +80,7 @@ const Signup = () => {
                 <Form 
                     name="signup"
                     layout="vertical"
-                    initialValues={{
-                        remember: true,
-                    }}
+                    initialValues={initialValues}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"

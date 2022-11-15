@@ -4,7 +4,7 @@ import styles from './UserItem.module.css';
 const UserItem = (props) => {
     const {username, firstName, lastName, address, email, role, _id: userId} = props.user;
     const fullName = `${firstName} ${lastName}`
-    const fullAddress = ` ${address.street} ${address.number}, ${address.city}, ${address.code}, ${address.country}`;
+    const fullAddress = ` ${address?.street} ${address?.number}, ${address?.city}, ${address?.code}, ${address?.country}`;
 
     return (
         <li>

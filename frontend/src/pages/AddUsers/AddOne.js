@@ -7,6 +7,20 @@ import useHttpRequest from "../../hooks/useHttpRequest";
 import useScrollToTopForAlert from "../../hooks/useScrollToTopForAlert";
 import styles from './AddUsers.module.css';
 
+const initialValues = {
+    username: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    street: "",
+    number: "",
+    city: "",
+    code: "",
+    country: "",
+    role:"",
+    password: "12345!!asdF",
+    remember: true,
+}
 
 const AddOne = () => {
     const [isLoading, error, sendRequest] = useHttpRequest();
@@ -60,10 +74,7 @@ const AddOne = () => {
                 <Form
                     name="addOne"
                     layout="vertical"
-                    initialValues={{
-                        password: "12345!!asdF",
-                        remember: true,
-                    }}
+                    initialValues={initialValues}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
