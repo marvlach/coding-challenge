@@ -4,12 +4,12 @@ import { validateNoStartEndSpaces } from "../../utils/antdFormFieldValidators";
 
 
 // mode can be 'signup', 'addOne', 'addMany'. 
-const UserForm = ({ mode }) => { 
-    
+const UserForm = ({ mode, field }) => { 
+    console.log('yooooooooooooooooooooooooooo', field)
     return (
         <>    
             <Form.Item
-                name="username"
+                name={field ? [field.name, 'username'] : 'username'}
                 label="Username"
                 rules={[
                     {
@@ -27,7 +27,7 @@ const UserForm = ({ mode }) => {
             </Form.Item>
 
             <Form.Item
-                name="email"
+                name={field ? [field.name, 'email'] : 'email'}
                 label="Email"
                 rules={[
                     {
@@ -47,7 +47,7 @@ const UserForm = ({ mode }) => {
 
             <Form.Item>
                 <Form.Item
-                    name="firstName"
+                    name={field ? [field.name, 'firstName'] : 'firstName'}
                     label="First Name"
                     style={{ display: 'inline-block', width: 'calc(50% - 4px)', margin: '0 4px 0 0'}}
                     rules={[
@@ -66,7 +66,7 @@ const UserForm = ({ mode }) => {
                 </Form.Item>
 
                 <Form.Item
-                    name="lastName"
+                    name={field ? [field.name, 'lastName'] : 'lastName'}
                     label="Last Name"
                     style={{ display: 'inline-block', width: 'calc(50% - 4px)', margin: '0 0 0 4px'}}
                     rules={[
@@ -89,7 +89,7 @@ const UserForm = ({ mode }) => {
             
             <Form.Item  >
                 <Form.Item
-                    name="street"
+                    name={field ? [field.name, 'street'] : 'street'}
                     label="Street"
                     style={{ display: 'inline-block', width: 'calc(70% - 4px)', margin: '0 4px 0 0'}}
                     rules={[
@@ -109,7 +109,7 @@ const UserForm = ({ mode }) => {
 
                 <Form.Item
                     label="Number"
-                    name="number"
+                    name={field ? [field.name, 'number'] : 'number'}
                     style={{ display: 'inline-block', width: 'calc(30% - 4px)', margin: '0  0 0 4px'}}
                     rules={[
                         {
@@ -130,7 +130,7 @@ const UserForm = ({ mode }) => {
             <Form.Item >
                 <Form.Item
                     label="City"
-                    name="city"
+                    name={field ? [field.name, 'city'] : 'city'}
                     style={{ display: 'inline-block', width: 'calc(40% - 4px )', margin: '0 4px 0 0' }}
                     rules={[
                         {
@@ -149,7 +149,7 @@ const UserForm = ({ mode }) => {
 
                 <Form.Item
                     label="Zip Code"
-                    name="code"
+                    name={field ? [field.name, 'code'] : 'code'}
                     style={{ display: 'inline-block', width: 'calc(20% - 4px )', margin: '0 2px 0 2px' }}
                     rules={[
                         {
@@ -168,7 +168,7 @@ const UserForm = ({ mode }) => {
 
                 <Form.Item
                     label="Country"
-                    name="country"
+                    name={field ? [field.name, 'country'] : 'country'}
                     style={{ display: 'inline-block', width: 'calc(40% - 4px)', margin: '0 0 0 4px' }}
                     rules={[
                         {
@@ -189,7 +189,7 @@ const UserForm = ({ mode }) => {
             {mode !== 'signup' && <> 
 
                 <Form.Item
-                    name="password"
+                    name={field ? [field.name, 'password'] : 'password'}
                     label="Password (This is default password. Please notify the user to change it)"
                     rules={[
                     {
@@ -261,7 +261,7 @@ const UserForm = ({ mode }) => {
             </Form.Item> </>}
             
             <Form.Item
-                name="role"
+                name={field ? [field.name, 'role'] : 'role'}
                 label="Role"
                 rules={[
                     {
