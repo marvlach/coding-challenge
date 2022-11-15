@@ -18,9 +18,9 @@ const initialValues = {
     city: "",
     code: "",
     country: "",
-    role:"",
+    role: "",
     password: "",
-    passwordRe:"",
+    passwordRe: "",
     remember: true,
 }
 

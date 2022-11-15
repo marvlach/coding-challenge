@@ -1,4 +1,4 @@
-import { Spin, Card, Alert, Button, Collapse, Form, Input } from "antd";
+import { Spin, Card, Alert, Button, Collapse, Form } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../../api/users/userApi";
@@ -15,6 +15,7 @@ const AddMany = () => {
     const [file, setFile] = useState();
     const [usersFromFile, setUsersFromFile] = useState([]);
     const [showAddMultipleForm, setShowAddMultipleForm] = useState(false);
+    const [importButtonDisabled, setImportButtonDisabled] = useState(true);
     const navigate = useNavigate();
     const fileReader = new FileReader();
 
@@ -29,31 +30,45 @@ const AddMany = () => {
         } 
     }, [usersFromFile])
 
+    useEffect(() => {
+        if (file) {
+            setImportButtonDisabled(false);
+            return;
+        } 
+        setImportButtonDisabled(true);
+    }, [file])
+
     // wait 1.5sec to see message and redirect to /users
-        useEffect(() => {
+    useEffect(() => {
 
-            if (!success) {
-                return
-            }
-            const timer = setTimeout(() => {
-                navigate("/users");
-            }, 1500);
+        if (!success) {
+            return
+        }
+        const timer = setTimeout(() => {
+            navigate("/users");
+        }, 1500);
 
-            return () => {
-                clearTimeout(timer)
-            }
-        }, [navigate, success]);
+        return () => {
+            clearTimeout(timer)
+        }
+    }, [navigate, success]);
 
 
     // Cancel or choose another file
     const handleCancel = () => {
         setShowAddMultipleForm(false);
         setFile();
-        setUsersFromFile([])
+        setUsersFromFile([]);
+        setImportButtonDisabled(true);
     }
 
     const handleFileChange = (e) => {
+        console.log('handleFileChange', e.target.files[0])
         setFile(e.target.files[0]);
+        /* if (e.target.files[0]) {
+            setImportButtonDisabled(false);
+        }
+        setImportButtonDisabled(true); */
     }
 
     const handleFileSubmit = (e) => {
@@ -129,12 +144,15 @@ const AddMany = () => {
                             onChange={handleFileChange}
                         />
 
-                        <Button onClick={handleFileSubmit} > IMPORT CSV </Button>
+                        <Button disabled={importButtonDisabled} onClick={handleFileSubmit} > IMPORT CSV </Button>
                     </form>
                 </>}
 
                 {showAddMultipleForm && <>
-                    <Button type="primary" onClick={handleCancel}> Cancel or choose another file</Button>
+                    <div className={styles['button-container']}>
+                        <Button type="primary" onClick={handleCancel}> Cancel or choose another file</Button>
+                    </div>
+                    
 
                     <Form
                         name="addOne"
@@ -164,15 +182,13 @@ const AddMany = () => {
                                 </>
                                 )}
                             </Form.List>
-                              
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                            Submit
-                            </Button>
-                        </Form.Item>
-                        {/* <Collapse defaultActiveKey={['0']} onChange={onPanelChange}>
-                            {pannelList}
-                        </Collapse> */}
+                        <div className={styles['button-container']}>     
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit">
+                                    Submit
+                                </Button>
+                            </Form.Item>
+                        </div> 
                     </Form>
                 </>}
             </Card>

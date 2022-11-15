@@ -4,6 +4,11 @@
     margin-top: 1rem;
 }
 
+.csv-container {
+    width: 50rem;
+    margin: 1rem auto;
+}
+
 .radio-container {
     width: 50rem;
     margin: 1rem auto;
@@ -12,4 +17,11 @@
 
 .form-title {
     text-align: center;
+}
+
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0 2rem 0;
 }
