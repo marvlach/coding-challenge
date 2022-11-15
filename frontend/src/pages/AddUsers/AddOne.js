@@ -1,12 +1,11 @@
-import { Card, Form, Alert, Spin } from "antd"
-import styles from './Signup.module.css';
-import useHttpRequest from "../../hooks/useHttpRequest";
-import { signup } from "../../api/users/userApi";
+import { Spin, Card, Alert, Form } from "antd";
 import { useEffect, useState } from "react";
-import useScrollToTopForAlert from "../../hooks/useScrollToTopForAlert";
 import { useNavigate } from "react-router-dom";
-import useIsAuthForPublicRoutes from "../../hooks/useIsAuthForPublicRoutes";
+import { createUser } from "../../api/users/userApi";
 import UserForm from "../../components/UserForm/UserForm";
+import useHttpRequest from "../../hooks/useHttpRequest";
+import useScrollToTopForAlert from "../../hooks/useScrollToTopForAlert";
+import styles from './AddUsers.module.css';
 
 const initialValues = {
     username: "",
@@ -18,47 +17,44 @@ const initialValues = {
     city: "",
     code: "",
     country: "",
-    role: "",
-    password: "",
-    passwordRe: "",
+    role:"",
+    password: "12345!!asdF",
     remember: true,
 }
 
-const Signup = () => {
+const AddOne = () => {
     const [isLoading, error, sendRequest] = useHttpRequest();
-    const [stay, setStay, authIsLoading, authError] = useIsAuthForPublicRoutes();
     const [success, setSuccess] = useState(null);
-    const navigate = useNavigate();
+    const navigate = useNavigate();    
 
     // hook that scrolls to top when error, success
     useScrollToTopForAlert(error, success);
 
-    // wait 1sec to see message and redirect to /login
+    // wait 1.5sec to see message and redirect to /users
     useEffect(() => {
 
         if (!success) {
             return
         }
-        console.log('hereeeee')
         const timer = setTimeout(() => {
-            navigate("/login");
-        }, 1000);
+            navigate("/users");
+        }, 1500);
 
         return () => {
             clearTimeout(timer)
         }
-    }, [navigate, success])
+    }, [navigate, success]);
 
     // 200 ok response
     const onResponse = (values, resBody) => {
-        setSuccess('Your account has been created. You will be redirected to the login page.');
+        setSuccess('The user has been created. You will be redirected to the users page.');
     }
-
     // form fields are ok: send request
     const onFinish = async (values) => {
         const { username, email, role, password, passwordRe, firstName, lastName, ...address} = values;
-        const args = {username, email, password, firstName, lastName, role, address}
-        await sendRequest(signup, [args], onResponse.bind(null, args))
+        const args = [{username, email, password, firstName, lastName, role, address}] // endpoint expects multiple
+        console.log(args);
+        await sendRequest(createUser, [args], onResponse.bind(null, args));
     }
 
     // form fields not ok
@@ -67,18 +63,16 @@ const Signup = () => {
     };
 
     return (
-    <>{ (stay || authError)  && 
-        <Spin tip="Loading..." spinning={isLoading || authIsLoading} >
+        <Spin tip="Loading..." spinning={isLoading} >
 
             {error && <Alert style={{width: '90%', margin: '1rem auto'}} message={error} type="error" showIcon closable banner />}
 
             {success && <Alert style={{width: '90%', margin: '1rem auto'}} message={success} type="success" showIcon closable banner/>}
 
             <Card className={styles['form-container']} >
-                <h1 className={styles['form-title']}> Signup </h1>
-                
-                <Form 
-                    name="signup"
+
+                <Form
+                    name="addOne"
                     layout="vertical"
                     initialValues={initialValues}
                     onFinish={onFinish}
@@ -86,11 +80,11 @@ const Signup = () => {
                     autoComplete="off"
                     scrollToFirstError
                 >
-                    <UserForm mode={'signup'} />
+                    <UserForm mode={'addOne'} />
                 </Form> 
             </Card>
-        </Spin>}
-    </>)
+        </Spin>
+    )
 }
 
-export default Signup
+export default AddOne

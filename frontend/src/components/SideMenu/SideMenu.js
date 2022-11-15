@@ -1,5 +1,6 @@
 import { Menu } from 'antd';
 import { UserOutlined, } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 
 const menuItems = [
@@ -11,12 +12,12 @@ const menuItems = [
             {
                 key: '/userList',
                 icon: <UserOutlined />,
-                label: 'Users List',
+                label: <Link to='/users'> Users List </Link>,
             },
             {
                 key: '/createUsers',
                 icon: <UserOutlined />,
-                label: 'Create Users',
+                label: <Link to='/users/add'> Add Users </Link>,
             },
         ]
     },

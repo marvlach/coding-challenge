@@ -16,6 +16,10 @@ export async function createUser(data) {
     return await httpApi.post(`user/add`, data );
 }
 
+export async function signup(data) {
+    return await httpApi.post(`user/signup`, data );
+}
+
 export async function loginUser(data) {
     return await httpApi.post(`user/login`, data );
 }

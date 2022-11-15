@@ -45,7 +45,7 @@ const userSchema = new Schema({
 // Index the fields
 userSchema.index({ username: 1, email: 1 }); // schema level
 
-// pre save hook
+// pre save hook for password hashing
 userSchema.pre("save", async function (next) {
  
     if (!this.isModified("password")) {
@@ -58,31 +58,32 @@ userSchema.pre("save", async function (next) {
 });
   
 
+// pre insertMany hook for password hashing
+userSchema.pre("insertMany", async function (next, docs) {
+    if (!Array.isArray(docs) || !docs.length) {
+        return next(new Error('User list shopuld not be empty'));
+    }
+
+    const hashedUsers = docs.map(async user => {
+        return await new Promise((resolve, reject) => {
+            bcryptjs.genSalt().then(salt => {
+                let password = user.password.toString();
+                bcryptjs.hash(password, salt).then(hash => {
+                    user.password = hash;
+                    resolve(user);
+                }).catch(e => { reject(e); })
+            }).catch(e => { reject(e) });
+        })
+    })
+
+    docs = await Promise.all(hashedUsers);
+    next();
+});
 
 // Method for checking if the password given matches the user's password
 userSchema.methods.matchPassword = async function (enteredPassword) {
     return await bcryptjs.compare(enteredPassword, this.password);
 }
-
-/* 
-userSchema.statics.login = async function (email, password) {
-    
-    const user = await this.findOne({ email });
-
-    if (!user) {
-        throw Error("incorrect email");
-    }
-    
-    const auth = await bcryptjs.compare(password, user.password);
-
-    if (!auth) {
-        throw Error("incorrect password");
-    }
-    
-    return user;
-    
-}; */
-
 
 const User = mongoose.model('User', userSchema);
 
