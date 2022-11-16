@@ -24,7 +24,7 @@ router.post('/signup', signupUser);
 
 router.post('/login', authUser);
 
-router.put("/:userId", authenticateJWT, verifyUserExistense, updateUser);
+router.patch("/:userId", authenticateJWT, verifyUserExistense, updateUser);
 
 router.delete("/:userId", authenticateJWT, verifyUserExistense, deleteUser);
 

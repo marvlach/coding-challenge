@@ -1,5 +1,6 @@
-import { Spin, Card, Alert } from "antd"
-import styles from './UserProfile.module.css'
+import { Spin, Card, Alert, Button } from "antd";
+import styles from './UserProfile.module.css';
+import { Link } from 'react-router-dom';
 import useHttpRequest from '../../hooks/useHttpRequest'
 import { useEffect, useState } from "react";
 import { getUserById } from "../../api/users/userApi";
@@ -27,12 +28,26 @@ const UserProfile = () => {
         fetchUsers().catch(error => console.log(error));
     }, [sendRequest, userId]);
 
+    const handleDelete = () => {
+        
+    }
+
     return (
         <Spin tip="Loading..." spinning={isLoading} >
             {error && <Alert style={{width: '90%', margin: '1rem auto'}} message={error} type="error" showIcon banner closable />}
 
             <Card className={styles['profile-container']} >
                 <h1 className={styles['profile-title']}> User Profile </h1>
+                <div className={styles['button-container']}>
+                    <Link to={`/users/${userId}/edit`}> 
+                        <Button style={{margin: '0 1rem'}} type="primary" >
+                            Edit user 
+                        </Button>
+                    </Link>
+                    <Button style={{margin: '0 1rem'}} type="primary" danger onClick={handleDelete}>
+                        Delete user
+                    </Button>
+                </div>
                 <div className={styles['user-info']} >
                     <div>{username}</div> 
                     <div>{email}</div> 

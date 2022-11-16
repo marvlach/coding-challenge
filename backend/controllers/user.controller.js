@@ -137,17 +137,18 @@ export const updateUser = async (req, res) => {
 
         console.log(subjectUserId, userToUpdate);
 
-        const updatedUser = await User.findOneAndUpdate({ _id: userToUpdate }, 
-            {username, firstName, lastName, email, address, role}).select('-password');
-
+        const updatedUser = await User.findOneAndUpdate({_id: userToUpdate},{
+            username, firstName, lastName, email, address, role
+        }, {new: true}).select('-password');
+        
         if (!updatedUser) {
             throw new Error("User does not exist");
-        } 
-        
+        }
+
         res.status(200).json({data: updatedUser, message: 'User updated successfully.'});
 
     } catch (error) {
-        res.status(400).json({ message: err.message })
+        res.status(400).json({ message: error.message })
     }
 }
 

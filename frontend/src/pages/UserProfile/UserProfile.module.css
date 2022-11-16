@@ -14,3 +14,9 @@
     margin: 1rem auto;
     animation: users-appear 1s ease-out forwards;
 }
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}

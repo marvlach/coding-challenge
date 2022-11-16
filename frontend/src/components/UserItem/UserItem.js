@@ -21,13 +21,23 @@ const UserItem = (props) => {
                 <div className={styles['action-column']}>
                     <div className={styles['button-container']}>
                         <Link to={`/users/${userId}`}>                         
-                            <Button type="primary"> 
+                            <Button style={{width: '8rem'}} type="primary" > 
                                 View Profile                              
                             </Button>
                         </Link>
                     </div>
-                    {/* <div className={styles['button-container']}><Button type="primary"> Actions </Button></div>
-                    <div className={styles['button-container']}><Button type="primary"> Actions </Button></div> */}
+                    <div className={styles['button-container']}>
+                        <Link to={`/users/${userId}/edit`}> 
+                            <Button style={{width: '8rem'}} type="primary" >
+                                Edit Profile 
+                            </Button>
+                        </Link>
+                    </div>
+                    <div className={styles['button-container']}>
+                        <Button style={{width: '8rem'}} type="primary" danger > 
+                            Delete Profile 
+                        </Button>
+                    </div>
                 </div>
                 
             </div>

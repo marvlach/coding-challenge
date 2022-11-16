@@ -166,7 +166,7 @@ const UserForm = ({ mode, field }) => {
                 </Form.Item>
             </Form.Item>
         
-            {mode !== 'signup' && <> 
+            {mode !== 'signup' && mode !== 'edit' && <> 
 
                 <Form.Item
                     name={field ? [field.name, 'password'] : 'password'}
@@ -263,7 +263,9 @@ const UserForm = ({ mode, field }) => {
             <div className={styles['button-container']}>
                 <Form.Item > 
                     <Button type="primary" htmlType="submit" >
-                        {mode === 'signup' ? 'Sign Up' : 'Create User'}
+                        {mode === 'signup' && 'Sign Up' }
+                        {mode === 'addOne' && 'Create User'}
+                        {mode === 'edit' && 'Edit User' }
                     </Button>
                 </Form.Item>
             </div>}

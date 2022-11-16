@@ -25,7 +25,7 @@ export async function loginUser(data) {
 }
 
 export async function updateUser(id, data) {
-    return await httpApi.put(`user/${id}`, data );
+    return await httpApi.patch(`user/${id}`, data );
 }
 
 export async function deleteUser(id) {
