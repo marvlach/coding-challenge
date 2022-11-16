@@ -5,6 +5,7 @@ import useHttpRequest from '../../hooks/useHttpRequest'
 import { useEffect, useState } from "react";
 import { getUserById } from "../../api/users/userApi";
 import { useParams } from "react-router-dom";
+import DeleteModal from "../../components/DeleteModal/DeleteModal";
 
 const UserProfile = () => {
 
@@ -15,24 +16,29 @@ const UserProfile = () => {
     const {username, firstName, lastName, address, email, role} = user;
     const fullName = `${firstName} ${lastName}`;
     const fullAddress = ` ${address?.street} ${address?.number}, ${address?.city}, ${address?.code}, ${address?.country}`;
+    const [showModal, setShowModal] = useState(false);
+
+    const handleShowModal = () => {
+        setShowModal(true);
+    }
+    const handleCloseModal = () => {
+        setShowModal(false);
+    }
 
     useEffect(() => {
         const onResponse = (data) => {
             setUser(data);
         }
 
-        const fetchUsers = async () => {
+        const fetchUser = async () => {
             await sendRequest(getUserById, [userId], onResponse);
         }
 
-        fetchUsers().catch(error => console.log(error));
+        fetchUser().catch(error => console.log(error));
     }, [sendRequest, userId]);
 
-    const handleDelete = () => {
-        
-    }
 
-    return (
+    return (<>
         <Spin tip="Loading..." spinning={isLoading} >
             {error && <Alert style={{width: '90%', margin: '1rem auto'}} message={error} type="error" showIcon banner closable />}
 
@@ -44,7 +50,7 @@ const UserProfile = () => {
                             Edit user 
                         </Button>
                     </Link>
-                    <Button style={{margin: '0 1rem'}} type="primary" danger onClick={handleDelete}>
+                    <Button onClick={handleShowModal} style={{margin: '0 1rem'}} type="primary" danger >
                         Delete user
                     </Button>
                 </div>
@@ -57,7 +63,11 @@ const UserProfile = () => {
                 </div>
             </Card>
         </Spin>
-    )
+        {showModal && <DeleteModal
+            handleCloseModal={handleCloseModal} 
+            userToDelete={{id: user._id, username: user.username} }
+        />}
+    </>)
 }
 
 export default UserProfile

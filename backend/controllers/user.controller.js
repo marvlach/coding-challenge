@@ -158,7 +158,7 @@ export const deleteUser = async (req, res) => {
         const subjectUserId = req.userId;
         const userToDelete = req.params.userId;
 
-        console.log(subjectUserId, userToUpdate);
+        console.log(subjectUserId, userToDelete);
 
         const deletedUser = await User.findOneAndDelete({ _id: userToDelete }).select('-password');
 
@@ -169,6 +169,6 @@ export const deleteUser = async (req, res) => {
         res.status(200).json({data: deletedUser, message: 'User updated successfully.'});
 
     } catch (error) {
-        res.status(400).json({ message: err.message })
+        res.status(400).json({ message: error.message })
     }
 }

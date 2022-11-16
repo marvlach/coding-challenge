@@ -1,6 +1,6 @@
-import { Spin, Card, Alert, Form } from "antd";
+import { Spin, Card, Alert, Form, Button } from "antd";
 import styles from './EditUser.module.css';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useHttpRequest from '../../hooks/useHttpRequest'
 import { useEffect, useState } from "react";
 import { getUserById, updateUser } from "../../api/users/userApi";
@@ -96,7 +96,12 @@ const EditUser = () => {
             {success && <Alert style={{width: '90%', margin: '1rem auto'}} message={success} type="success" showIcon closable banner/>}
 
             {showForm && <Card className={styles['form-container']} >
-                <h1 className={styles['form-title']}> User Profile </h1>
+                <h1 className={styles['form-title']}> Edit User </h1>
+                <Link to={`/users/${userId}`}> 
+                    <Button style={{margin: '0 1rem'}} type="primary" >
+                        Back to User Profile 
+                    </Button>
+                </Link>
                 <Form
                     name="edit"
                     layout="vertical"
