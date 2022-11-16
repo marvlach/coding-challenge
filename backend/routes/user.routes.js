@@ -1,5 +1,14 @@
 import express from "express";
-import { getUser, createUser, authUser, getUserById, signupUser } from "../controllers/user.controller.js";
+import { 
+    getUser, 
+    createUser, 
+    authUser, 
+    getUserById, 
+    signupUser, 
+    updateUser, 
+    deleteUser
+} from "../controllers/user.controller.js";
+
 import { authenticateJWT, verifyUserExistense } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
@@ -15,6 +24,8 @@ router.post('/signup', signupUser);
 
 router.post('/login', authUser);
 
-// router.put("/:userID", updateUser);
+router.patch("/:userId", authenticateJWT, verifyUserExistense, updateUser);
+
+router.delete("/:userId", authenticateJWT, verifyUserExistense, deleteUser);
 
 export default router;

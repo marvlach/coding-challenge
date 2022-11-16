@@ -33,7 +33,8 @@ const ContextualLayout = (props) => {
                 </Header>
                 {content}
                 <Footer style={{ textAlign: 'center', }} >
-                    Coding Test for Autohaus-Royal
+                    <p> Coding Test for Autohaus-Royal</p>
+                    <p> marios.vlachog@gmail.com </p>
                 </Footer>
             </Layout> 
             
