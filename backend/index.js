@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import dotenv from 'dotenv';
 
 import userRoutes from "./routes/user.routes.js";
+import commentRoutes from "./routes/comment.routes.js";
 
 
 dotenv.config();
@@ -35,6 +36,7 @@ connection.once('open', () => {
 
 
 app.use('/user', userRoutes);
+app.use('/comment', commentRoutes);
 
 app.set('query parser', 'simple');
 

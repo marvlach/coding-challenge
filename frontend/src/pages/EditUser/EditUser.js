@@ -38,7 +38,7 @@ const EditUser = () => {
         return () => {
             clearTimeout(timer)
         }
-    }, [navigate, dispatch, success])
+    }, [navigate, dispatch, success, userId])
 
     // show form when initial values are fetched
     useEffect(() => {
