@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getUserById } from "../../api/users/userApi";
 import { useParams } from "react-router-dom";
 import DeleteModal from "../../components/DeleteModal/DeleteModal";
+import CommentList from "../../components/CommentList/CommentList";
 
 const UserProfile = () => {
 
@@ -61,6 +62,7 @@ const UserProfile = () => {
                     <div>{fullAddress}</div> 
                     <div>{role}</div> 
                 </div>
+                <CommentList recipientId={userId}/>
             </Card>
         </Spin>
         {showModal && <DeleteModal

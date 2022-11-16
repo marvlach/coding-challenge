@@ -1,0 +1,30 @@
+.comments-container {
+    width: 80%;
+    margin: 1rem auto;
+    margin-top: 1rem;
+}
+
+.comments {
+    max-width: 60rem;
+    width: 90%;
+    margin: 1rem auto;
+    animation: comments-appear 1s ease-out forwards;
+}
+/* 
+.users ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+} */
+
+@keyframes comments-appear {
+    from {
+        opacity: 0;
+        transform: translateY(3rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

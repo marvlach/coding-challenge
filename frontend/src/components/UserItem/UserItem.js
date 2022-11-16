@@ -1,6 +1,7 @@
 import { Button } from 'antd';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CommentList from '../CommentList/CommentList';
 import DeleteModal from '../DeleteModal/DeleteModal';
 import styles from './UserItem.module.css';
 
@@ -9,6 +10,7 @@ const UserItem = (props) => {
     const fullName = `${firstName} ${lastName}`
     const fullAddress = ` ${address?.street} ${address?.number}, ${address?.city}, ${address?.code}, ${address?.country}`;
     const [showModal, setShowModal] = useState(false);
+    const [showComments, setShowComments] = useState(false);
 
     const handleShowModal = () => {
         setShowModal(true);
@@ -17,6 +19,9 @@ const UserItem = (props) => {
         setShowModal(false);
     }
 
+    const toggleComments = () => {
+        setShowComments(prev => !prev)
+    }
 
 
     return (<>
@@ -51,9 +56,16 @@ const UserItem = (props) => {
                             Delete Profile 
                         </Button>
                     </div>
+                    <div className={styles['button-container']}>
+                        <Button onClick={toggleComments} style={{width: '8rem'}} type="primary" > 
+                            Show Comments
+                        </Button>
+                    </div>
                 </div>
                 
             </div>
+            
+            {showComments && <CommentList recipientId={userId}/>}
             
         </li>
         {showModal && <DeleteModal 
