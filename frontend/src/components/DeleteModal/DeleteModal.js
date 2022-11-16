@@ -85,7 +85,7 @@ const DeleteModal = ({ handleCloseModal, userToDelete }) => {
             } else { // if in /users: reload, else go to users
                 navigate(pathname === '/users' ? 0 : '/users')
             }
-        }, 100);
+        }, 1);
         
         return () => {
             clearTimeout(timer);
@@ -113,7 +113,7 @@ const DeleteModal = ({ handleCloseModal, userToDelete }) => {
     }
 
     const handleOk = async () => {
-        await sendRequest(deleteUser, ['userToDelete.id'], onResponse);
+        await sendRequest(deleteUser, [userToDelete.id], onResponse);
     };
 
     const handleCancel = () => {
