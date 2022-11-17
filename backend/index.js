@@ -13,16 +13,16 @@ dotenv.config();
 const app = express();
 
 const PORT = process.env.PORT || 5000;
+const MONGO_DB_URI = process.env.MONGO_DB;
 
 app.use(cors({ 
-    origin: ['http://localhost:3000'],
-    method: ['GET', 'POST'] 
+    origin: '*' 
 }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://localhost:27017/', {
+mongoose.connect(MONGO_DB_URI, {
     dbName: 'CCDB',
     useNewUrlParser: true,
     useUnifiedTopology: true
