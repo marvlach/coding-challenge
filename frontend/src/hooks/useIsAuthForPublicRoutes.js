@@ -17,8 +17,6 @@ const useIsAuthForPublicRoutes = () => {
     const location = useLocation();
     const dispatch = useDispatch();
 
-    console.log('i came from ', location.state?.from?.pathname);
-
     useEffect(() => {
         // successfully used token to get userData
         const onGetUserResponse = (userData) => {
@@ -53,7 +51,6 @@ const useIsAuthForPublicRoutes = () => {
 
     }, [dispatch, stay, location.state?.from?.pathname, sendRequest, error, navigate, user.isAuth])
     
-    console.log('useIsAuthForPublicRoutes', error);
     return [stay, setStay, isLoading, error]
 }
 

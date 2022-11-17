@@ -19,7 +19,6 @@ const CommentList = ({ recipientId }) => {
 	// load comments
 	useEffect(() => {
         const onResponse = (data) => {
-			console.log(data)
             setComments(data);
         }
 
@@ -36,7 +35,6 @@ const CommentList = ({ recipientId }) => {
 
 	// 200 commented succefully
 	const onResponse = (values, resBody) => {
-		console.log(values, resBody);	
 		// this will trigger useEffect and refetch all comments, 
 		// to see other peoples' comments as well
 		form.resetFields();
@@ -46,7 +44,6 @@ const CommentList = ({ recipientId }) => {
 	// form fields are ok: send request
 	const onFinish = async (values) => {
 		const args = {...values, recipientId:recipientId}
-		console.log(args)
 		await sendRequest(postComment, [args], onResponse.bind(null, args));
 	}
 

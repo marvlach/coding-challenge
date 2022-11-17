@@ -13,7 +13,7 @@ const UserProfile = () => {
     const [isLoading, error, sendRequest] = useHttpRequest();
     const [user, setUser] = useState({});
     const userId = useParams().userId;
-    console.log(userId);
+    
     const {username, firstName, lastName, address, email, role} = user;
     const fullName = `${firstName} ${lastName}`;
     const fullAddress = 

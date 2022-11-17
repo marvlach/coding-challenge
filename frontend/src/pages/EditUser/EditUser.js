@@ -19,7 +19,6 @@ const EditUser = () => {
     const userId = useParams().userId;
     const dispatch = useDispatch();
     const storeUser = useSelector(store => store.user);
-    console.log('storeUser', storeUser.data);
 
     // hook that scrolls to top when error, success
     useScrollToTopForAlert(error, success);
@@ -79,7 +78,6 @@ const EditUser = () => {
     const onFinish = async (values) => {
         const { username, email, role, password, passwordRe, firstName, lastName, ...address} = values;
         const args = {username, email, role, password, passwordRe, firstName, lastName, address};
-        console.log(userId, args)
         await sendRequest(updateUser, [userId, args], onResponse.bind(null, args));
     }
 
