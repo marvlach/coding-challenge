@@ -39,7 +39,6 @@ const Signup = () => {
         if (!success) {
             return
         }
-        console.log('hereeeee')
         const timer = setTimeout(() => {
             navigate("/login");
         }, 1000);

@@ -63,7 +63,6 @@ const AddMany = () => {
     }
 
     const handleFileChange = (e) => {
-        console.log('handleFileChange', e.target.files[0])
         setFile(e.target.files[0]);
         /* if (e.target.files[0]) {
             setImportButtonDisabled(false);
@@ -80,9 +79,7 @@ const AddMany = () => {
         
         fileReader.onload = event => {
             const csvOutput = event.target.result;
-            console.log(csvOutput)
             const array =  csvFileToArray(csvOutput);
-            console.log(array)
             const arrayWithDefaultEmailUsername = array.map(user => {
                 return {
                     ...user, 
@@ -107,14 +104,12 @@ const AddMany = () => {
 
     // form fields are ok: send request
     const onFinish = async (values) => {
-        console.log(values.users)
 
         const args = values.users.map(user => {
             const { username, email, role, password, passwordRe, firstName, lastName, ...address} = user;
             return {username, email, password, firstName, lastName, role, address}
         })
                 
-        console.log(args);
         await sendRequest(createUser, [args], onResponse.bind(null, args));
     }
 
@@ -122,9 +117,6 @@ const AddMany = () => {
     const onFinishFailed = (error) => {
         console.log('Failed:', error);
     };
-
-    console.log(usersFromFile)
-    
 
     return (
         <Spin tip="Loading..." spinning={isLoading} >

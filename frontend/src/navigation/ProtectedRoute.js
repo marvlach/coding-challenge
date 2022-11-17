@@ -9,11 +9,9 @@ const ProtectedRoute = ({ children, }) => {
     const location = useLocation();
 
     if (!user.isAuth) {
-        console.log('ProtectedRoute navigated to login', user)
         return <Navigate to='/login' replace={true} state={{from: location}}/>;
     }
 
-    console.log('ProtectedRoute renders', user)
     return children ? children : <Outlet />;
   };
 

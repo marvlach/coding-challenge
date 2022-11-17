@@ -53,7 +53,6 @@ const AddOne = () => {
     const onFinish = async (values) => {
         const { username, email, role, password, passwordRe, firstName, lastName, ...address} = values;
         const args = [{username, email, password, firstName, lastName, role, address}] // endpoint expects multiple
-        console.log(args);
         await sendRequest(createUser, [args], onResponse.bind(null, args));
     }
 

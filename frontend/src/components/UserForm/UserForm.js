@@ -5,7 +5,6 @@ import { validateNoStartEndSpaces, validateStreetNumber, validateZipCode } from 
 
 // mode can be 'signup', 'addOne', 'addMany'. 
 const UserForm = ({ mode, field }) => { 
-    console.log('yooooooooooooooooooooooooooo', field)
     return (
         <>    
             <Form.Item
