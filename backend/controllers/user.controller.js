@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+import Comment from "../models/comment.model.js";
 import User from "../models/user.model.js";
 import { generateToken } from "../utils/generateToken.js";
 
@@ -160,14 +162,31 @@ export const deleteUser = async (req, res) => {
 
         console.log(subjectUserId, userToDelete);
 
-        const deletedUser = await User.findOneAndDelete({ _id: userToDelete }).select('-password');
+        const foundUserToDelete = await User.findById(userToDelete);
 
-        if (!deletedUser) {
+        if (!foundUserToDelete) {
             throw new Error("User does not exist");
-        } 
-        
-        res.status(200).json({data: deletedUser, message: 'User updated successfully.'});
+        }
 
+        // put null to all comments that reference the user as author/recipient
+        const updatedComments = await Comment.bulkWrite([
+            { "updateMany": {
+              "filter": { authorId: userToDelete},
+              "update": { "$set": { "authorId": null } }
+            }},
+            { "updateMany": {
+              "filter": { recipientId: userToDelete},
+              "update": { "$set": { "recipientId": null } } 
+            }},
+            { "deleteMany": { // this might not scale well
+                "filter": { recipientId: null, authorId: null}
+            }}
+        ])
+        
+        const deletedUser = await User.findOneAndDelete({ _id: userToDelete }).select('-password');
+        
+        res.status(200).json({data: deletedUser, message: 'User deleted successfully.'});
+        
     } catch (error) {
         res.status(400).json({ message: error.message })
     }

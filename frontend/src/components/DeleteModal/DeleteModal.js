@@ -1,7 +1,6 @@
 import { Modal } from "antd";
-import styles from './DeleteModal.module.css';
 import useHttpRequest from '../../hooks/useHttpRequest'
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { deleteUser } from "../../api/users/userApi";
 import { useDispatch, useSelector } from "react-redux";
 import {userActions} from '../../store/userSlice';
@@ -91,7 +90,7 @@ const DeleteModal = ({ handleCloseModal, userToDelete }) => {
             clearTimeout(timer);
         }
 
-    }, [modal.logout, modal.navigate])
+    }, [modal.logout, modal.navigate, dispatch, navigate, pathname])
 
     // on fail to delete
     useEffect(() => {
@@ -99,7 +98,7 @@ const DeleteModal = ({ handleCloseModal, userToDelete }) => {
             return
         }
         dispatchModal({ type: 'FAIL', payload: {username: userToDelete.username, error:error}})
-    }, [error])
+    }, [error, userToDelete.username])
     
 
     // 200 edit succefully

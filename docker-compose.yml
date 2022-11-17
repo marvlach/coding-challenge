@@ -1,0 +1,41 @@
+# Version of Docker-compose
+version: '2.12'
+services:
+  # react app
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.front
+    ports:
+      - 3010:3000
+    environment:
+      - REACT_APP_API=http://localhost:8010
+      - WDS_SOCKET_PORT=0
+    depends_on:
+      - backend
+
+  # node server
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.back
+    ports:
+      - 8010:8000
+    environment:
+      - PORT=8000
+      - JWT_SECRET=some secret
+      - JWT_REFRESH_SECRET=some other secret
+      - MONGO_DB=mongodb://mongo:27017/
+    depends_on:
+      - mongo
+  
+  # mongoDB
+  mongo:
+    image: mongo
+    ports:
+      - 27020:27017
+    volumes:
+      - mongoDB:/data/db
+  
+volumes:
+  mongoDB:

@@ -1,6 +1,6 @@
 import { Form, Input, Button } from 'antd';
 import styles from './UserForm.module.css';
-import { validateNoStartEndSpaces } from "../../utils/antdFormFieldValidators";
+import { validateNoStartEndSpaces, validateStreetNumber, validateZipCode } from "../../utils/antdFormFieldValidators";
 
 
 // mode can be 'signup', 'addOne', 'addMany'. 
@@ -110,6 +110,8 @@ const UserForm = ({ mode, field }) => {
                     rules={[
                         {
                             validator: validateNoStartEndSpaces
+                        }, {
+                            validator: validateStreetNumber
                         }
                     ]}
                 >
@@ -142,6 +144,8 @@ const UserForm = ({ mode, field }) => {
                     rules={[
                         {
                             validator: validateNoStartEndSpaces
+                        }, {
+                            validator: validateZipCode
                         }
                     ]}
                 >

@@ -6,16 +6,24 @@ import { useEffect, useState } from "react";
 import { getUserById } from "../../api/users/userApi";
 import { useParams } from "react-router-dom";
 import DeleteModal from "../../components/DeleteModal/DeleteModal";
+import CommentList from "../../components/CommentList/CommentList";
 
 const UserProfile = () => {
 
     const [isLoading, error, sendRequest] = useHttpRequest();
-    const [user, setUser] = useState([]);
+    const [user, setUser] = useState({});
     const userId = useParams().userId;
 
     const {username, firstName, lastName, address, email, role} = user;
     const fullName = `${firstName} ${lastName}`;
-    const fullAddress = ` ${address?.street} ${address?.number}, ${address?.city}, ${address?.code}, ${address?.country}`;
+    const fullAddress = 
+        `street: ${address?.street ? address?.street : ' - '}, 
+        number: ${address?.number ? address?.number : ' - '},  
+        city: ${address?.city ? address?.city : ' - '},   
+        code: ${address?.code ? address?.code: ' - '},  
+        country: ${address?.country ? address?.country: ' - '}`;
+
+
     const [showModal, setShowModal] = useState(false);
 
     const handleShowModal = () => {
@@ -42,7 +50,7 @@ const UserProfile = () => {
         <Spin tip="Loading..." spinning={isLoading} >
             {error && <Alert style={{width: '90%', margin: '1rem auto'}} message={error} type="error" showIcon banner closable />}
 
-            <Card className={styles['profile-container']} >
+            {!error && <Card className={styles['profile-container']} >
                 <h1 className={styles['profile-title']}> User Profile </h1>
                 <div className={styles['button-container']}>
                     <Link to={`/users/${userId}/edit`}> 
@@ -55,13 +63,14 @@ const UserProfile = () => {
                     </Button>
                 </div>
                 <div className={styles['user-info']} >
-                    <div>{username}</div> 
-                    <div>{email}</div> 
-                    <div>{fullName}</div> 
-                    <div>{fullAddress}</div> 
-                    <div>{role}</div> 
+                    <div>Username: {username}</div> 
+                    <div>Email: {email}</div> 
+                    <div>Full Name: {fullName}</div> 
+                    <div>Full Address: {fullAddress}</div> 
+                    <div>Role: {role}</div> 
                 </div>
-            </Card>
+                <CommentList recipientId={userId}/>
+            </Card>}
         </Spin>
         {showModal && <DeleteModal
             handleCloseModal={handleCloseModal} 
