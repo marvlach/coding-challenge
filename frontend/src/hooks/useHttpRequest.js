@@ -11,7 +11,6 @@ const useHttpRequest = () =>  {
         try {
             // make API request with given arguments
             const response = await apiCall.apply(null, apiCallArgs);
-            console.log(response)
             if (response.status !== 200) {
                 throw new Error('Request failed!');
             }
