@@ -16,8 +16,13 @@ const UserProfile = () => {
 
     const {username, firstName, lastName, address, email, role} = user;
     const fullName = `${firstName} ${lastName}`;
-    const fullAddress = JSON.stringify(address);
-    
+    const fullAddress = 
+        `street: ${address?.street ? address?.street : ' - '}, 
+        number: ${address?.number ? address?.number : ' - '},  
+        city: ${address?.city ? address?.city : ' - '},   
+        code: ${address?.code ? address?.code: ' - '},  
+        country: ${address?.country ? address?.country: ' - '}`;
+
 
     const [showModal, setShowModal] = useState(false);
 

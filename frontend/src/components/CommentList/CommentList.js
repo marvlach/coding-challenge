@@ -1,12 +1,12 @@
 import {List, Comment, Avatar, Button, Form, Input, Spin} from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
-import moment from 'moment';
 import styles from './CommentList.module.css';
 import { getCommentsByRecipientId, postComment } from '../../api/comments/commentApi.js'
 import useHttpRequest from '../../hooks/useHttpRequest';
 import { getColorFromMongoId, mongoDateToString } from '../../utils/utils';
 import { Link } from 'react-router-dom';
+import { validateNoStartEndSpaces } from '../../utils/antdFormFieldValidators';
 
 const { TextArea } = Input;
 
@@ -113,6 +113,9 @@ const CommentList = ({ recipientId }) => {
 									required: true,
 									message: 'Please write a comment',
 								},
+								{
+									validator: validateNoStartEndSpaces
+								}								
 							]}
 						>
                             <TextArea rows={3} />
