@@ -16,7 +16,9 @@ const UserProfile = () => {
 
     const {username, firstName, lastName, address, email, role} = user;
     const fullName = `${firstName} ${lastName}`;
-    const fullAddress = ` ${address?.street} ${address?.number}, ${address?.city}, ${address?.code}, ${address?.country}`;
+    const fullAddress = JSON.stringify(address);
+    
+
     const [showModal, setShowModal] = useState(false);
 
     const handleShowModal = () => {
@@ -56,11 +58,11 @@ const UserProfile = () => {
                     </Button>
                 </div>
                 <div className={styles['user-info']} >
-                    <div>{username}</div> 
-                    <div>{email}</div> 
-                    <div>{fullName}</div> 
-                    <div>{fullAddress}</div> 
-                    <div>{role}</div> 
+                    <div>Username: {username}</div> 
+                    <div>Email: {email}</div> 
+                    <div>Full Name: {fullName}</div> 
+                    <div>Full Address: {fullAddress}</div> 
+                    <div>Role: {role}</div> 
                 </div>
                 <CommentList recipientId={userId}/>
             </Card>

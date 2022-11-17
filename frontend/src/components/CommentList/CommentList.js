@@ -1,79 +1,94 @@
-import {Tooltip, List, Comment, Avatar, Button, Form, Input} from 'antd';
+import {List, Comment, Avatar, Button, Form, Input, Spin} from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import moment from 'moment';
 import styles from './CommentList.module.css';
+import { getCommentsByRecipientId, postComment } from '../../api/comments/commentApi.js'
+import useHttpRequest from '../../hooks/useHttpRequest';
+import { getColorFromMongoId, mongoDateToString } from '../../utils/utils';
+import { Link } from 'react-router-dom';
 
 const { TextArea } = Input;
 
 const CommentList = ({ recipientId }) => {
-    const [submitting, setSubmitting] = useState(false);
-    const [value, setValue] = useState('');
-    const data = [
-        {
-          author: 'Han Solo',
-          content: (
-            <p>
-              We supply a series of design principles, practical patterns and high quality design
-              resources (Sketch and Axure), to help people create their product prototypes beautifully and
-              efficiently.
-            </p>
-          ),
-          datetime: (
-            <Tooltip title="2016-11-22 11:22:33">
-              <span>8 hours ago</span>
-            </Tooltip>
-          ),
-        },
-        {
-          author: 'Han Solo',
-          content: (
-            <p>
-              We supply a series of design principles, practical patterns and high quality design
-              resources (Sketch and Axure), to help people create their product prototypes beautifully and
-              efficiently.
-            </p>
-          ),
-          datetime: (
-            <Tooltip title="2016-11-22 10:22:33">
-              <span>9 hours ago</span>
-            </Tooltip>
-          ),
-        },
-    ];
+    const [comments, setComments] = useState([]);
+	const [success, setSuccess] = useState(true);
+	const [isLoading, error, sendRequest] = useHttpRequest();
+	const [form] = Form.useForm();
 
-    const handleSubmit = () => {
-        
-    };
+	// load comments
+	useEffect(() => {
+        const onResponse = (data) => {
+			console.log(data)
+            setComments(data);
+        }
 
-    const handleChange = (e) => {
-        setValue(e.target.value);
-    };
+        const fetchUserComments = async () => {
+            await sendRequest(getCommentsByRecipientId, [recipientId], onResponse);
+        }
 
+		if (success) {
+			fetchUserComments().catch(error => console.log(error));
+			setSuccess(false);
+		}
+    
+    }, [sendRequest, recipientId, success]);
 
+	// 200 commented succefully
+	const onResponse = (values, resBody) => {
+		console.log(values, resBody);	
+		// this will trigger useEffect and refetch all comments, 
+		// to see other peoples' comments as well
+		form.resetFields();
+		setSuccess(true);
+	}
+
+	// form fields are ok: send request
+	const onFinish = async (values) => {
+		const args = {...values, recipientId:recipientId}
+		console.log(args)
+		await sendRequest(postComment, [args], onResponse.bind(null, args));
+	}
+
+	// form fields not ok
+	const onFinishFailed = (error) => {
+		console.log('Failed:', error); 
+	};
+
+   
     return (
+		<Spin tip="Loading..." spinning={isLoading} >
         <div className={styles['comments-container']}>
-            {data.length > 0 && 
+            {comments.length > 0 && 
             <List
                 className="comment-list"
-                header={`${data.length} replies`}
+                header={`${comments.length} comments`}
                 itemLayout="horizontal"
-                dataSource={data}
+                dataSource={comments}
                 renderItem={(item) => (
                     <li>
                         <Comment
                             avatar={
                                 <Avatar 
-                                    style={{ backgroundColor: 'red', verticalAlign: 'middle', }} 
+                                    style={{ 
+										backgroundColor: `#${getColorFromMongoId(item.author?._id ?? 'ffffff')}`, 
+										verticalAlign: 'middle', 
+									}} 
                                     size="large" 
                                     gap={1}
                                 >
-                                    {item.author.charAt(0)}
+									<Link to={`/users/${item.author?._id}`}>
+                                    	{item.author?.username?.charAt(0) ?? 'D'} 
+									</Link>
                                 </Avatar>
                             }
-                            author={item.author} // should have <Link>
-                            content={item.content}
-                            datetime={item.datetime}
+                            author={
+								<Link to={`/users/${item.author?._id}`}>
+									<span>{item.author?.username ?? 'Deleted User'}</span>
+								</Link>
+							} 
+                            content={item.comment}
+                            datetime={mongoDateToString(item.updatedAt)}
                         />
                     </li>
                 )}
@@ -82,19 +97,36 @@ const CommentList = ({ recipientId }) => {
             <Comment
                 avatar={<Avatar size="medium" icon={<UserOutlined />} />}
                 content={
-                    <>
-                        <Form.Item>
-                            <TextArea rows={4} onChange={handleChange} value={value} />
+					<Form
+						form={form}
+						name="comment"
+						initialValues={{}}
+						onFinish={onFinish}
+						onFinishFailed={onFinishFailed}
+						autoComplete="off"
+						scrollToFirstError
+					>
+                        <Form.Item
+							name={'comment'}
+							rules={[
+								{
+									required: true,
+									message: 'Please write a comment',
+								},
+							]}
+						>
+                            <TextArea rows={3} />
                         </Form.Item>
                         <Form.Item>
-                        <Button htmlType="submit" loading={submitting} onClick={handleSubmit} type="primary">
-                            Add Comment
-                        </Button>
+							<Button htmlType="submit" loading={isLoading} type="primary">
+								Add Comment
+							</Button>
                         </Form.Item>
-                    </>
+					</Form>					
                 }
             />
-        </div>    
+        </div>   
+		</Spin> 
     );
 }
 

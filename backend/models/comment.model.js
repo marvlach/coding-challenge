@@ -1,12 +1,12 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const commentSchema = new mongoose.Schema({
     authorId: { 
-        type: String, 
+        type: Schema.Types.ObjectId, ref:'User', 
         required: [true, "Author is Required"],
     },
     recipientId: { 
-        type: String,
+        type: Schema.Types.ObjectId, ref:'User',
         required: [true, "Recipient is Required"],
     },
     comment: { 
